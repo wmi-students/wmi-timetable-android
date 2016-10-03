@@ -8,5 +8,5 @@ import lombok.Data;
 public class Meeting {
     Date startDate;
     Date endDate;
-    ArrayList<Schedule> schedules;
+    ArrayList<MeetingDay> meetingDays;
 }
