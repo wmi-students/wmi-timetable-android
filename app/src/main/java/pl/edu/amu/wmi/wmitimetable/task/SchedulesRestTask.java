@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import lombok.Getter;
 import pl.edu.amu.wmi.wmitimetable.http.NullHostNameVerifier;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
-import pl.edu.amu.wmi.wmitimetable.service.ScheduleRestService;
+import pl.edu.amu.wmi.wmitimetable.rest.ScheduleRestService;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 

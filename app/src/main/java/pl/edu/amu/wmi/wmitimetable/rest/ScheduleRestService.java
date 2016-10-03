@@ -1,4 +1,4 @@
-package pl.edu.amu.wmi.wmitimetable.service;
+package pl.edu.amu.wmi.wmitimetable.rest;
 
 import java.util.ArrayList;
 
