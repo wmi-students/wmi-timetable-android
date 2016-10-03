@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import lombok.Getter;
 import pl.edu.amu.wmi.wmitimetable.http.NullHostNameVerifier;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
-import pl.edu.amu.wmi.wmitimetable.service.RestService;
+import pl.edu.amu.wmi.wmitimetable.service.ScheduleRestService;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
@@ -27,8 +27,8 @@ public class SchedulesRestTask extends AsyncTask<Void, Void, ArrayList<Schedule>
                     .setClient(new OkClient(new OkHttpClient().setHostnameVerifier(new NullHostNameVerifier())))
                     .build();
 
-            RestService restService = restAdapter.create(RestService.class);
-            ArrayList<Schedule> schedules = restService.getAllSchedules();
+            ScheduleRestService scheduleRestService = restAdapter.create(ScheduleRestService.class);
+            ArrayList<Schedule> schedules = scheduleRestService.getAllSchedules();
             return schedules;
         }catch (Exception e){
             this.exception = e;
