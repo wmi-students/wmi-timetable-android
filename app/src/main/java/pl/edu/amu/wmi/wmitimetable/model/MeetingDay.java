@@ -2,12 +2,10 @@ package pl.edu.amu.wmi.wmitimetable.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import lombok.Data;
 
-/**
- * Created by Wojtek on 2016-10-03.
- */
-
+@Data
 public class MeetingDay {
     Date date;
-    ArrayList<Schedule> schedules;
+    ArrayList<Schedule> schedules = new ArrayList<>();
 }

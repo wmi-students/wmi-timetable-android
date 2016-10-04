@@ -8,7 +8,13 @@ import lombok.Setter;
 public class World {
     private static World mInstance = null;
 
-    @Getter
+    //@Getter @Setter
+    //private ArrayList<Schedule> schedules = new ArrayList<>();
+
+    @Getter @Setter
+    Boolean loaded = false;
+
+    @Getter @Setter
     private ArrayList<Meeting> meetings = new ArrayList<>();
 
     private World(){

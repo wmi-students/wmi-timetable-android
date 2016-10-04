@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class Meeting {
-    Date startDate;
-    Date endDate;
-    ArrayList<MeetingDay> meetingDays;
+    Date date;
+    ArrayList<MeetingDay> meetingDays = new ArrayList<>();
 }

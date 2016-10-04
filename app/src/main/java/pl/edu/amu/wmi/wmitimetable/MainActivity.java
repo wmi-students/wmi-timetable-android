@@ -1,5 +1,6 @@
 package pl.edu.amu.wmi.wmitimetable;
 
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,11 +18,20 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.squareup.okhttp.OkHttpClient;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import pl.edu.amu.wmi.wmitimetable.http.NullHostNameVerifier;
+import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
-import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
+import pl.edu.amu.wmi.wmitimetable.model.World;
+import pl.edu.amu.wmi.wmitimetable.rest.ScheduleRestService;
+import pl.edu.amu.wmi.wmitimetable.service.MeetingService;
+import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,32 +68,16 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        // load data asynchronously
+        new SchedulesRestTask().execute();
+
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
     }
 
     public void onButtonClick(View view) {
-
-        try {
-            ArrayList<Schedule> schedules =  new SchedulesRestTask().execute().get();
-            int liczba = schedules.size();
-        }catch (InterruptedException e){
-
-        }catch (ExecutionException e){
-
-        }catch (Exception e){
-
-        }
-
-        //Snackbar.make(view, "load rest", Snackbar.LENGTH_LONG).setAction("Action", null).show();
     }
+
 
 //    public void onButtonClick(){
 //        Toast.makeText(getApplicationContext(),"asdasdasdasdasdasdasdsadasd",Toast.LENGTH_LONG);
@@ -113,6 +107,40 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public class SchedulesRestTask extends AsyncTask<Void, Void, ArrayList<Meeting>> {
+
+        private final String REST_URL = "http://wmitimetable.herokuapp.com";
+
+        @Override
+        protected ArrayList<Meeting> doInBackground(Void... params) {
+            try{
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setEndpoint(REST_URL)
+                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                        .setClient(new OkClient(new OkHttpClient().setHostnameVerifier(new NullHostNameVerifier())))
+                        .build();
+
+                ScheduleRestService scheduleRestService = restAdapter.create(ScheduleRestService.class);
+                return new ScheduleService().convertSchedulesToMeetings( scheduleRestService.getAllSchedules());
+            }catch (Exception e){
+                return  null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Meeting> meetings) {
+            super.onPostExecute(meetings);
+            World.getInstance().setMeetings(meetings);
+            World.getInstance().setLoaded(true);
+            refreshTabs();
+        }
+    }
+
+    private void refreshTabs() {
+
+    }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -122,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_MEETING = "meeting_object";
 
         public PlaceholderFragment() {
         }
@@ -143,7 +172,18 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            TextView textSubject = (TextView) rootView.findViewById(R.id.meeting_subject);
+            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
+            if(World.getInstance().getLoaded()) {
+                // TODO
+                //new MeetingService().getMeeting()
+                Meeting meeting = World.getInstance().getMeetings().get(pageNr);
+                textView.setText(meeting.getDate().toString());
+                textSubject.setText(meeting.getMeetingDays().get(0).getSchedules().get(0).getSubject());
+            }else {
+                textView.setText("...");
+            }
             return rootView;
         }
     }
@@ -171,17 +211,15 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         }
 
+
+
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+            if(World.getInstance().getLoaded()) {
+                return World.getInstance().getMeetings().get(position).getDate().toString();
+            }else{
+                return "...";
             }
-            return null;
         }
     }
 }
