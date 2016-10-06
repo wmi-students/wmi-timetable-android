@@ -29,6 +29,7 @@ import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.model.World;
 import pl.edu.amu.wmi.wmitimetable.rest.ScheduleRestService;
+import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.MeetingService;
 import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 import retrofit.RestAdapter;
@@ -36,6 +37,7 @@ import retrofit.client.OkClient;
 
 public class MainActivity extends AppCompatActivity {
 
+    DataService dataService;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.dataService = new DataService(getApplicationContext());
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,7 +113,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_delete_data) {
+            deleteData(null);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteData(View view) {
+        dataService.deleteLocalData();
     }
 
     private void showSettings(View view) {

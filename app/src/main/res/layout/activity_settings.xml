@@ -45,18 +45,6 @@
         android:layout_alignParentEnd="true"
         android:onClick="showMeetings" />
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerYear"
-        android:spinnerMode="dialog"
-        android:prompt="@string/spinner_prompt_year"
-        android:background="@android:drawable/btn_default"
-        android:layout_marginTop="52dp"
-        android:layout_below="@+id/settingsTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:text="PLAN ZAJEC"
         android:layout_width="wrap_content"
@@ -68,5 +56,26 @@
         android:textColor="@color/colorSettingsForeground"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Wydział Matematyki i Informatyki UAM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settingsTitle"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView"
+        android:textColor="@color/colorSettingsForeground" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerYear"
+        android:spinnerMode="dialog"
+        android:prompt="@string/spinner_prompt_year"
+        android:background="@android:drawable/btn_default"
+        android:layout_marginTop="79dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
