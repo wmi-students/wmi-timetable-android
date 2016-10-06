@@ -1,5 +1,6 @@
 package pl.edu.amu.wmi.wmitimetable;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -68,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // load data asynchronously
-        new SchedulesRestTask().execute();
-
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    }
+
+    protected void initializeViewPager(){
 
     }
 
@@ -101,45 +104,17 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showSettings(null);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public class SchedulesRestTask extends AsyncTask<Void, Void, ArrayList<Meeting>> {
-
-        private final String REST_URL = "http://wmitimetable.herokuapp.com";
-
-        @Override
-        protected ArrayList<Meeting> doInBackground(Void... params) {
-            try{
-                RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setEndpoint(REST_URL)
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setClient(new OkClient(new OkHttpClient().setHostnameVerifier(new NullHostNameVerifier())))
-                        .build();
-
-                ScheduleRestService scheduleRestService = restAdapter.create(ScheduleRestService.class);
-                return new ScheduleService().convertSchedulesToMeetings( scheduleRestService.getAllSchedules());
-            }catch (Exception e){
-                return  null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Meeting> meetings) {
-            super.onPostExecute(meetings);
-            World.getInstance().setMeetings(meetings);
-            World.getInstance().setLoaded(true);
-            refreshTabs();
-        }
+    private void showSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
-
-    private void refreshTabs() {
-
-    }
-
 
     /**
      * A placeholder fragment containing a simple view.

@@ -11,10 +11,20 @@ public class World {
     //@Getter @Setter
     //private ArrayList<Schedule> schedules = new ArrayList<>();
 
-    @Getter @Setter
+    @Getter
     Boolean loaded = false;
 
-    @Getter @Setter
+    public void setMeetings(ArrayList<Meeting> meetings) {
+        this.meetings = meetings;
+        this.loaded = true;
+    }
+
+    public void clear(){
+        this.meetings = new ArrayList<>();
+        this.loaded = false;
+    }
+
+    @Getter
     private ArrayList<Meeting> meetings = new ArrayList<>();
 
     private World(){

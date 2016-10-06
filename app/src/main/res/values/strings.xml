@@ -2,4 +2,8 @@
     <string name="app_name">WMI Timetable</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="spinner_prompt_year">Wybierz rok</string>
+    <string name="spinner_prompt_study">Wybierz kierunek</string>
+    <string name="spinner_prompt_group">Wybierz grupę ćwiczeniową</string>
+    <string name="spinner_prompt_semester">Wybierz semestr</string>
 </resources>
