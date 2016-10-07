@@ -1,11 +1,9 @@
 package pl.edu.amu.wmi.wmitimetable;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,28 +14,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
-import android.widget.TextView;
+import org.joda.time.DateTime;
 
-import com.squareup.okhttp.OkHttpClient;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import java.util.Date;
 
-import pl.edu.amu.wmi.wmitimetable.http.NullHostNameVerifier;
+import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
-import pl.edu.amu.wmi.wmitimetable.model.Schedule;
+import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.World;
-import pl.edu.amu.wmi.wmitimetable.rest.ScheduleRestService;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
-import pl.edu.amu.wmi.wmitimetable.service.MeetingService;
-import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
+import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MainActivity extends AppCompatActivity {
 
     DataService dataService;
+    SettingsService settingsService;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -58,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.dataService = new DataService(getApplicationContext());
+        this.settingsService = new SettingsService(this);
 
         setContentView(R.layout.activity_main);
 
@@ -72,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -79,19 +76,8 @@ public class MainActivity extends AppCompatActivity {
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
-    protected void initializeViewPager(){
-
-    }
-
     public void onButtonClick(View view) {
     }
-
-
-//    public void onButtonClick(){
-//        Toast.makeText(getApplicationContext(),"asdasdasdasdasdasdasdsadasd",Toast.LENGTH_LONG);
-//        //get
-//        //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,23 +95,39 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            showSettings(null);
+            showSettings();
             return true;
         }
 
-        if (id == R.id.action_delete_data) {
-            deleteData(null);
+        if (id == R.id.action_reset) {
+            settingsReset();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteData(View view) {
+    private void settingsReset() {
+        deleteData();
+        resetSettings();
+        goSettings();
+    }
+
+    private void resetSettings(){
+        settingsService.saveSetting("study", null);
+        settingsService.saveSetting("year", null);
+        settingsService.saveSetting("group", null);
+    }
+
+    private void deleteData() {
         dataService.deleteLocalData();
     }
 
-    private void showSettings(View view) {
+    private void showSettings() {
+        goSettings();
+    }
+
+    private void goSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
@@ -140,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_MEETING = "meeting_object";
+
+        MeetingListAdapter meetingArrayAdapter;
+        ListView meetingListView;
 
         public PlaceholderFragment() {
         }
@@ -160,19 +165,24 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            TextView textSubject = (TextView) rootView.findViewById(R.id.meeting_subject);
-            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
             int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
-            if(World.getInstance().getLoaded()) {
-                // TODO
-                //new MeetingService().getMeeting()
-                Meeting meeting = World.getInstance().getMeetings().get(pageNr);
-                textView.setText(meeting.getDate().toString());
-                textSubject.setText(meeting.getMeetingDays().get(0).getSchedules().get(0).getSubject());
-            }else {
-                textView.setText("...");
-            }
+
+            meetingListView = (ListView)  rootView.findViewById(R.id.list_meeting_days);
+            ArrayList<MeetingDay> meetingDays = World.getInstance().getMeetings().get(pageNr).getMeetingDays();
+            meetingArrayAdapter = new MeetingListAdapter(getActivity(),R.layout.meeting_list_item,meetingDays);
+            meetingListView.setAdapter(meetingArrayAdapter);
+
+
+//            if( World.getInstance().getLoaded()) {
+//                // TODO
+//                //new MeetingService().getMeeting()
+//                Meeting meeting = World.getInstance().getMeetings().get(pageNr);
+//                textView.setText(meeting.getDate().toString());
+//                textSubject.setText(meeting.getMeetingDays().get(0).getSchedules().get(0).getSubject());
+//            }else {
+//                textView.setText("...");
+//            }
             return rootView;
         }
     }
@@ -191,13 +201,21 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            Date today = new Date();
+            int offset = 0;
+            for (Meeting meeting : dataService.getMeetings()) {
+                if(meeting.getDate().before(DateTime.now().plusDays(-1).toDate())){
+                    offset++;
+                }else{
+                    break;
+                }
+            }
+            return PlaceholderFragment.newInstance(position + offset);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return  5;
         }
 
 
@@ -205,7 +223,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             if(World.getInstance().getLoaded()) {
-                return World.getInstance().getMeetings().get(position).getDate().toString();
+                SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM");
+                Meeting meeting = World.getInstance().getMeetings().get(position);
+                return simpleDate.format(meeting.getDate());
             }else{
                 return "...";
             }

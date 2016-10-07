@@ -2,19 +2,18 @@ package pl.edu.amu.wmi.wmitimetable;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.audiofx.BassBoost;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.io.IOException;
 import java.util.ArrayList;
-
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
-import pl.edu.amu.wmi.wmitimetable.model.World;
+import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
+import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
+import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -22,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Spinner spinnerYear, spinnerStudy, spinnerGroup;
     private ProgressDialog dialog;
     DataService dataService;
+    SettingsService settingsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +37,21 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog = new ProgressDialog(SettingsActivity.this);
         dataService = new DataService(getApplicationContext());
+        settingsService = new SettingsService(this);
 
-        if(!dataService.isLoaded()) {
-            loadData();
-        }
+        loadData();
     }
 
     private void loadData() {
-        if(dataService.loadMeetings()){
-            showMeetings(null);
-        }else{
-            new LoadDataTask().execute();
+        if(dataService.getLoaded()){
+            loadFilters();
+        }else {
+            if (dataService.isDataFile()) {
+                dataService.loadMeetings();
+                goMeetings();
+            } else {
+                new LoadDataTask().execute();
+            }
         }
     }
 
@@ -66,42 +70,90 @@ public class SettingsActivity extends AppCompatActivity {
             dataService.setMeetings(meetings);
             dataService.saveMeetings();
 
+            loadFilters();
+
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
         }
     }
 
-    public void showMeetings(View view){
+    public void goMeetings(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    private void loadFilters() {
-        // YEARS
-        String[] listYear = new String[]{"Rok 1", "Rok 2","Rok 3","Rok 4","Rok 5"};
-        ArrayAdapter<String> dataAdapterYear = new ArrayAdapter<>(this, R.layout.settings_spinner_item, listYear);
-        dataAdapterYear.setDropDownViewResource(R.layout.settings_spinner_dropdown_item);
-        spinnerYear.setAdapter(dataAdapterYear);
-
-        // STUDIES
-        String[] listStudies = new String[]{
-                "Matematyka - Licencjackie",
-                "Matematyka - Uzupełaniające",
-                "Nauczanie Matematyki i Informatyki - Licencjat",
-                "Nauczanie Matematyki i Informatyki - Uzupełniające",
-                "Informatyka - Inżynier",
-                "Informatyka - Uzupełniające (magister)",
-                "Informatyka - Uzupełniające (magister po inżynier)",
-                "Informatyka - Uzupełniające (magister inżynier)",
-                "Podyplomowe - Informatyka i Technologie Informacyjne",
-                "Podyplomowe - Matematyka"
-        };
-        ArrayAdapter<String> dataAdapterStudies = new ArrayAdapter<>(this, R.layout.settings_spinner_item, listStudies);
-        dataAdapterStudies.setDropDownViewResource(R.layout.settings_spinner_dropdown_item);
-        spinnerStudy.setAdapter(dataAdapterStudies);
-
-
+    public void showMeetings(View view){
+        saveSettings();
+        filterMeetings();
+        goMeetings();
     }
 
+    private void filterMeetings() {
+        ArrayList<Meeting> filteredMeetings = new ArrayList<>();
+
+        ArrayList<Meeting> meetings = dataService.getMeetings();
+        for (Meeting meeting : meetings) {
+            if(meetingHasFiteredSchedules(meeting)){
+                filteredMeetings.add(meeting);
+            }
+        }
+        dataService.setMeetings(filteredMeetings);
+        dataService.saveMeetings();
+    }
+
+    private boolean meetingHasFiteredSchedules(Meeting meeting) {
+        for (MeetingDay meetingDay : meeting.getMeetingDays()) {
+            for (Schedule schedule : meetingDay.getSchedules()) {
+                if(settingsService.scheduleInFilter(schedule)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void saveSettings() {
+        String study = (String) spinnerStudy.getSelectedItem();
+        settingsService.saveSetting("study", study);
+        String year = (String) spinnerYear.getSelectedItem();
+        settingsService.saveSetting("year", year);
+        String group = (String) spinnerGroup.getSelectedItem();
+        settingsService.saveSetting("group", group);
+    }
+
+    private void loadFilters() {
+        loadStudies();
+        loadYears();
+        loadGroups();
+    }
+
+    private void loadStudies() {
+        ArrayAdapter<String> dataAdapterStudies = new ArrayAdapter<>(this, R.layout.settings_spinner_item, dataService.getFilter().getStudies());
+        dataAdapterStudies.setDropDownViewResource(R.layout.settings_spinner_dropdown_item);
+        spinnerStudy.setAdapter(dataAdapterStudies);
+        String study = settingsService.loadSetting("study");
+        if(study != null) {
+            spinnerStudy.setSelection(dataAdapterStudies.getPosition(study));
+        }
+    }
+    private void loadYears() {
+        ArrayAdapter<String> dataAdapterYear = new ArrayAdapter<>(this, R.layout.settings_spinner_item, dataService.getFilter().getYears());
+        dataAdapterYear.setDropDownViewResource(R.layout.settings_spinner_dropdown_item);
+        spinnerYear.setAdapter(dataAdapterYear);
+        String year = settingsService.loadSetting("year");
+        if(year != null) {
+            spinnerYear.setSelection(dataAdapterYear.getPosition(year));
+        }
+    }
+
+    private void loadGroups() {
+        ArrayAdapter<String> dataAdapterGroups = new ArrayAdapter<>(this, R.layout.settings_spinner_item, dataService.getFilter().getGroups());
+        dataAdapterGroups.setDropDownViewResource(R.layout.settings_spinner_dropdown_item);
+        spinnerGroup.setAdapter(dataAdapterGroups);
+        String group = settingsService.loadSetting("group");
+        if(group != null) {
+            spinnerGroup.setSelection(dataAdapterGroups.getPosition(group));
+        }
+    }
 }

@@ -12,7 +12,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import pl.edu.amu.wmi.wmitimetable.model.Filter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
+import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
+import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.model.World;
 
 public class DataService {
@@ -27,6 +30,10 @@ public class DataService {
         this.gson = new Gson();
     }
 
+    public Filter getFilter(){
+        return World.getInstance().getFilter();
+    }
+
     public ArrayList<Meeting> getMeetings(){
         return  World.getInstance().getMeetings();
     }
@@ -36,10 +43,6 @@ public class DataService {
     }
 
     public boolean loadMeetings(){
-        if(!isDataFile()){
-            return  false;
-        }
-
         try {
             World.getInstance().setMeetings(loadMeetingsFromFile());
             return true;
@@ -47,10 +50,6 @@ public class DataService {
             World.getInstance().clear();
             return false;
         }
-    }
-
-    public boolean isLoaded(){
-        return  World.getInstance().getLoaded();
     }
 
     public boolean saveMeetings(){
@@ -94,7 +93,12 @@ public class DataService {
     }
 
     public boolean deleteLocalData(){
-        return deleteFile(MEETINGS_FILE_NAME);
+        if(deleteFile(MEETINGS_FILE_NAME)){
+            World.getInstance().setLoaded(false);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private boolean deleteFile(String fileName){
@@ -115,5 +119,9 @@ public class DataService {
     public boolean isDataFile() {
         File file = new File(context.getFilesDir(), MEETINGS_FILE_NAME);
         return  file.exists();
+    }
+
+    public boolean getLoaded() {
+        return  World.getInstance().getLoaded();
     }
 }
