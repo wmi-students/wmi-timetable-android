@@ -50,7 +50,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
         MeetingDay meetingDay = getItem(position);
 
         meetingDayListView = (ListView) view.findViewById(R.id.list_schedules);
-        ArrayList<Schedule> schedules = filterSchedules( meetingDay.getSchedules());
+        ArrayList<Schedule> schedules = filterSchedules(meetingDay != null ? meetingDay.getSchedules() : null);
         meetingDayArrayAdapter = new MeetingDayListAdapter(view.getContext(),R.layout.meeting_day_list_item, schedules);
         meetingDayListView.setAdapter(meetingDayArrayAdapter);
 

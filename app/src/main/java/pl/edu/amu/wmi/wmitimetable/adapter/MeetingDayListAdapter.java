@@ -53,7 +53,7 @@ class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         Date date = scheduleService.getDateFromSchedule(schedule);
         textTime.setText(format.format(date));
 
-        textRoom.setText(schedule.getRoom1());
+        textRoom.setText(schedule != null ? schedule.getRoom1() : null);
         textGroup.setText(schedule.getGroup());
         textSubject.setText(schedule.getSubject());
 
