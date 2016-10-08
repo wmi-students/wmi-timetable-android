@@ -18,7 +18,6 @@ import java.util.List;
 import pl.edu.amu.wmi.wmitimetable.R;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
-import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {

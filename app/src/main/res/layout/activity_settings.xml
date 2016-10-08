@@ -37,23 +37,11 @@
         android:text="Pokaż zajęcia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/buttonShowMeetings"
         android:onClick="showMeetings"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="PLAN ZAJEC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/settingsTitle"
-        android:textSize="34sp"
-        android:textStyle="normal|bold"
-        android:textColor="@color/colorSettingsForeground"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -81,5 +69,30 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Spróbuj jeszcze raz ?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonReload"
+        android:layout_above="@+id/buttonShowMeetings"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible"
+        android:onClick="reloadDataClick" />
+
+    <TextView
+        android:text="PLAN ZAJĘĆ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/settingsTitle"
+        android:textSize="34sp"
+        android:textStyle="normal|bold"
+        android:textColor="@color/colorSettingsForeground"
+        android:layout_marginTop="46dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

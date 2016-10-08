@@ -2,16 +2,18 @@ package pl.edu.amu.wmi.wmitimetable;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.audiofx.BassBoost;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
-import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
-import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
@@ -22,6 +24,9 @@ public class SettingsActivity extends AppCompatActivity {
     private ProgressDialog dialog;
     DataService dataService;
     SettingsService settingsService;
+    Button buttonShowMeetings;
+    Button buttonReloadData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,9 @@ public class SettingsActivity extends AppCompatActivity {
         spinnerStudy = (Spinner) findViewById(R.id.spinnerStudy);
         spinnerGroup = (Spinner) findViewById(R.id.spinnerGroup);
 
+        buttonShowMeetings = (Button) findViewById(R.id.buttonShowMeetings);
+        buttonReloadData = (Button) findViewById(R.id.buttonReload);
+
         dialog = new ProgressDialog(SettingsActivity.this);
         dataService = new DataService(getApplicationContext());
         settingsService = new SettingsService(this);
@@ -43,10 +51,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        if(dataService.getLoaded()){
+        if(dataService.getLoaded() && settingsService.settingsExists()){
             loadFilters();
         }else {
-            if (dataService.isDataFile()) {
+            if (dataService.isDataFile() && settingsService.settingsExists()) {
                 dataService.loadMeetings();
                 goMeetings();
             } else {
@@ -55,27 +63,50 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    public void reloadDataClick(View view){
+        buttonReloadData.setVisibility(View.INVISIBLE);
+        loadData();
+    }
+
+    public void showButtons(int visibility){
+        spinnerStudy.setVisibility(visibility);
+        spinnerYear.setVisibility(visibility);
+        spinnerGroup.setVisibility(visibility);
+        buttonShowMeetings.setVisibility(visibility);
+    }
+
     private class LoadDataTask extends SchedulesRestTask{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog.setMessage("Wczytywanie zajęć...");
+            dialog.setMessage("Wczytywanie zajęć... :)");
             dialog.show();
+            showButtons(View.INVISIBLE);
         }
 
         @Override
         protected void onPostExecute(ArrayList<Meeting> meetings) {
             super.onPostExecute(meetings);
 
-            dataService.setMeetings(meetings);
-            dataService.saveMeetings();
-
-            loadFilters();
-
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
+
+            if(meetings == null){
+                showNoDataInfo();
+                buttonReloadData.setVisibility(View.VISIBLE);
+            }else {
+                dataService.setMeetings(meetings);
+                dataService.saveMeetings();
+
+                loadFilters();
+                showButtons(View.VISIBLE);
+            }
         }
+    }
+
+    private void showNoDataInfo() {
+        Snackbar.make(findViewById(android.R.id.content), "Sprawdź połączenie internetowe :(", Snackbar.LENGTH_LONG).show();
     }
 
     public void goMeetings(){

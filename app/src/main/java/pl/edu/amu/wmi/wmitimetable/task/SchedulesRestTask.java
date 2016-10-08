@@ -38,6 +38,5 @@ public class SchedulesRestTask extends AsyncTask<Void, Void, ArrayList<Meeting>>
     @Override
     protected void onPostExecute(ArrayList<Meeting> meetings) {
         super.onPostExecute(meetings);
-        World.getInstance().setMeetings(meetings);
     }
 }

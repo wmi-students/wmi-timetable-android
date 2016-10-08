@@ -31,4 +31,7 @@ public class SettingsService {
         return  schedule.getStudy().equals(study) && schedule.getYear().equals(year) && (schedule.getGroup().equals(group) || schedule.getGroup().contains("WA"));
     }
 
+    public boolean settingsExists() {
+        return loadSetting("study") != null;
+    }
 }

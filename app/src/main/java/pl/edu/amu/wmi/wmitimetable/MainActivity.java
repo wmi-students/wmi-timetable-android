@@ -20,8 +20,8 @@ import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
+import lombok.Setter;
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
@@ -168,6 +168,10 @@ public class MainActivity extends AppCompatActivity {
         MeetingListAdapter meetingArrayAdapter;
         ListView meetingListView;
 
+        @Setter
+        Meeting meeting;
+
+
         public PlaceholderFragment() {
         }
 
@@ -175,11 +179,12 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(int sectionNumber, Meeting meeting) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+            fragment.setMeeting(meeting);
             return fragment;
         }
 
@@ -191,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
 
             meetingListView = (ListView)  rootView.findViewById(R.id.list_meeting_days);
-            ArrayList<MeetingDay> meetingDays = World.getInstance().getMeetings().get(pageNr).getMeetingDays();
+            ArrayList<MeetingDay> meetingDays =  meeting.getMeetingDays();
             meetingArrayAdapter = new MeetingListAdapter(getActivity(),R.layout.meeting_list_item,meetingDays);
             meetingListView.setAdapter(meetingArrayAdapter);
 
@@ -219,7 +224,15 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
             }
-            return PlaceholderFragment.newInstance(position + offset);
+
+            Meeting meeting;
+            int meetingIndex = position + offset;
+            if(meetingIndex>meetings.size()-1){
+                meeting = new Meeting();
+            }else{
+                meeting = meetings.get(meetingIndex);
+            }
+            return PlaceholderFragment.newInstance(meetingIndex, meeting);
         }
 
         @Override
@@ -231,9 +244,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            Meeting meeting = meetings.get(position);
-            SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM");
-            return simpleDate.format(meeting.getDate());
+            if(position < meetings.size()-1) {
+                Meeting meeting = meetings.get(position);
+                SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM");
+                return simpleDate.format(meeting.getDate());
+            }else{
+                return "...";
+            }
         }
     }
 }
