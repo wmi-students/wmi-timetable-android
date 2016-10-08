@@ -28,8 +28,7 @@ public class ScheduleService {
 
     public ArrayList<Meeting> convertSchedulesToMeetings(ArrayList<Schedule> schedules){
         ArrayList<MeetingDay> meetingDays = groupSchedulesToMeetingDays(schedules);
-        ArrayList<Meeting> meetings = groupMeetingDaysToMeetings(meetingDays);
-        return  meetings;
+        return groupMeetingDaysToMeetings(meetingDays);
     }
 
     public ArrayList<MeetingDay> groupSchedulesToMeetingDays(ArrayList<Schedule> schedules) {

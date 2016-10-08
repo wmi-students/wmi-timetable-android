@@ -68,8 +68,7 @@ public class DataService {
 
     public ArrayList<Meeting> loadMeetingsFromFile() throws IOException{
         String content = readFromFile(MEETINGS_FILE_NAME);
-        ArrayList<Meeting> meetings = deserializeMeetings(content);
-        return meetings;
+        return deserializeMeetings(content);
     }
 
     private ArrayList<Meeting> deserializeMeetings(String content) {
