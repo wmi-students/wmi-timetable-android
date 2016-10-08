@@ -80,37 +80,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void goMeetings(){
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     public void showMeetings(View view){
         saveSettings();
-        filterMeetings();
         goMeetings();
-    }
-
-    private void filterMeetings() {
-        ArrayList<Meeting> filteredMeetings = new ArrayList<>();
-
-        ArrayList<Meeting> meetings = dataService.getMeetings();
-        for (Meeting meeting : meetings) {
-            if(meetingHasFiteredSchedules(meeting)){
-                filteredMeetings.add(meeting);
-            }
-        }
-        dataService.setMeetings(filteredMeetings);
-        dataService.saveMeetings();
-    }
-
-    private boolean meetingHasFiteredSchedules(Meeting meeting) {
-        for (MeetingDay meetingDay : meeting.getMeetingDays()) {
-            for (Schedule schedule : meetingDay.getSchedules()) {
-                if(settingsService.scheduleInFilter(schedule)){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void saveSettings() {

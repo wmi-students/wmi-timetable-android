@@ -25,6 +25,7 @@ import java.util.Date;
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
+import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.model.World;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    ArrayList<Meeting> meetings = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        loadData();
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -72,11 +77,32 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
-    public void onButtonClick(View view) {
+    private void loadData() {
+        meetings = filterMeetings(dataService.getMeetings());
+    }
+
+    private ArrayList<Meeting> filterMeetings(ArrayList<Meeting> meetings) {
+        ArrayList<Meeting> filteredMeetings = new ArrayList<>();
+
+        for (Meeting meeting : meetings) {
+            if(meetingHasFiteredSchedules(meeting)){
+                filteredMeetings.add(meeting);
+            }
+        }
+        return filteredMeetings;
+    }
+
+    private boolean meetingHasFiteredSchedules(Meeting meeting) {
+        for (MeetingDay meetingDay : meeting.getMeetingDays()) {
+            for (Schedule schedule : meetingDay.getSchedules()) {
+                if(settingsService.scheduleInFilter(schedule)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -88,12 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             showSettings();
             return true;
@@ -173,16 +195,6 @@ public class MainActivity extends AppCompatActivity {
             meetingArrayAdapter = new MeetingListAdapter(getActivity(),R.layout.meeting_list_item,meetingDays);
             meetingListView.setAdapter(meetingArrayAdapter);
 
-
-//            if( World.getInstance().getLoaded()) {
-//                // TODO
-//                //new MeetingService().getMeeting()
-//                Meeting meeting = World.getInstance().getMeetings().get(pageNr);
-//                textView.setText(meeting.getDate().toString());
-//                textSubject.setText(meeting.getMeetingDays().get(0).getSchedules().get(0).getSubject());
-//            }else {
-//                textView.setText("...");
-//            }
             return rootView;
         }
     }
@@ -199,11 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            Date today = new Date();
             int offset = 0;
-            for (Meeting meeting : dataService.getMeetings()) {
+            for (Meeting meeting : meetings) {
                 if(meeting.getDate().before(DateTime.now().plusDays(-1).toDate())){
                     offset++;
                 }else{
@@ -222,13 +231,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(World.getInstance().getLoaded()) {
-                SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM");
-                Meeting meeting = World.getInstance().getMeetings().get(position);
-                return simpleDate.format(meeting.getDate());
-            }else{
-                return "...";
-            }
+            Meeting meeting = meetings.get(position);
+            SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM");
+            return simpleDate.format(meeting.getDate());
         }
     }
 }

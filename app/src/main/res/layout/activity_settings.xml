@@ -20,6 +20,29 @@
         android:id="@+id/textView"
         android:textColor="@color/colorSettingsForeground" />
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerGroup"
+        android:spinnerMode="dialog"
+        android:prompt="@string/spinner_prompt_group"
+        android:background="@android:drawable/btn_default"
+        android:layout_below="@+id/spinnerYear"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Pokaż zajęcia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:onClick="showMeetings"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <TextView
         android:text="PLAN ZAJEC"
         android:layout_width="wrap_content"
@@ -29,7 +52,8 @@
         android:textStyle="normal|bold"
         android:textColor="@color/colorSettingsForeground"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -38,10 +62,12 @@
         android:spinnerMode="dialog"
         android:prompt="@string/spinner_prompt_study"
         android:background="@android:drawable/btn_default"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="54dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -52,28 +78,8 @@
         android:background="@android:drawable/btn_default"
         android:layout_below="@+id/spinnerStudy"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerGroup"
-        android:spinnerMode="dialog"
-        android:prompt="@string/spinner_prompt_group"
-        android:background="@android:drawable/btn_default"
-        android:layout_below="@+id/spinnerYear"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:text="Pokaż zajęcia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:onClick="showMeetings"
-        android:layout_below="@+id/spinnerGroup"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
