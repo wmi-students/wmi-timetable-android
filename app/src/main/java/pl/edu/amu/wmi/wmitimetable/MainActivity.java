@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     DataService dataService;
     SettingsService settingsService;
+    ArrayList<Meeting> meetings = new ArrayList<>();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -43,13 +44,10 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
-    ArrayList<Meeting> meetings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,12 +193,16 @@ public class MainActivity extends AppCompatActivity {
 
             int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
 
-            meetingListView = (ListView)  rootView.findViewById(R.id.list_meeting_days);
-            ArrayList<MeetingDay> meetingDays =  meeting.getMeetingDays();
-            meetingArrayAdapter = new MeetingListAdapter(getActivity(),R.layout.meeting_list_item,meetingDays);
+            meetingListView = (ListView) rootView.findViewById(R.id.list_meeting_days);
+            ArrayList<MeetingDay> meetingDays = meeting.getMeetingDays();
+            meetingArrayAdapter = new MeetingListAdapter(getActivity(), R.layout.meeting_list_item, meetingDays);
             meetingListView.setAdapter(meetingArrayAdapter);
 
             return rootView;
+        }
+
+        public void setMeeting(Meeting meeting) {
+            this.meeting = meeting;
         }
     }
 
