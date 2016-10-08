@@ -1,6 +1,8 @@
 package pl.edu.amu.wmi.wmitimetable.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +16,47 @@ public class World {
     @Getter @Setter
     Boolean loaded = false;
 
-    @Getter @Setter
+    public void setMeetings(ArrayList<Meeting> meetings) {
+        this.meetings = meetings;
+        createFiltersFromMeetings();
+        loaded = true;
+    }
+
+    private void createFiltersFromMeetings() {
+        filter.clear();
+        for (Meeting meeting : this.meetings) {
+            for (MeetingDay meetingDay : meeting.getMeetingDays()) {
+                for (Schedule schedule : meetingDay.getSchedules()) {
+                    if(!filter.studyExists(schedule.getStudy())){
+                        filter.getStudies().add(schedule.getStudy());
+                    }
+                    if(!filter.yearExists(schedule.getYear())){
+                        filter.getYears().add(schedule.getYear());
+                    }
+                    if(!filter.groupExists(schedule.getGroup())){
+                        if(!schedule.getGroup().contains("WA")) {
+                            filter.getGroups().add(schedule.getGroup());
+                        }
+                    }
+                }
+            }
+        }
+
+        Collections.sort(filter.getStudies(), String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(filter.getYears(), String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(filter.getGroups(), String.CASE_INSENSITIVE_ORDER);
+    }
+
+    public void clear(){
+        this.meetings = new ArrayList<>();
+        this.loaded = false;
+    }
+
+    @Getter
     private ArrayList<Meeting> meetings = new ArrayList<>();
+
+    @Getter
+    Filter filter = new Filter();
 
     private World(){
 
