@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import pl.edu.amu.wmi.wmitimetable.R;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
@@ -55,7 +56,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
 
         TextView day = (TextView) view.findViewById(R.id.meeting_day_header);
         Date dayDate = meetingDay.getDate();
-        DateFormat format = new SimpleDateFormat("dd MMM");
+        DateFormat format = new SimpleDateFormat("dd MMM", new Locale("pl", "PL"));
         day.setText(format.format(dayDate));
 
         return view;

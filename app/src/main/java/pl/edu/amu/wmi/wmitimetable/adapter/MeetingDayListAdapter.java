@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import pl.edu.amu.wmi.wmitimetable.R;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
@@ -48,7 +49,7 @@ public class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         TextView textRoom = (TextView) view.findViewById(R.id.schedule_room);
         TextView textSubject = (TextView) view.findViewById(R.id.schedule_subject);
 
-        DateFormat format = new SimpleDateFormat("HH:mm");
+        DateFormat format = new SimpleDateFormat("HH:mm", new Locale("pl", "PL"));
         Date date = scheduleService.getDateFromSchedule(schedule);
         textTime.setText(format.format(date));
 

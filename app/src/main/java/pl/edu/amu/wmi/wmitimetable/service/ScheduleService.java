@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +15,16 @@ import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 
 public class ScheduleService {
+
+    public static Date removeTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
 
     public ArrayList<Meeting> convertSchedulesToMeetings(ArrayList<Schedule> schedules){
         ArrayList<MeetingDay> meetingDays = groupSchedulesToMeetingDays(schedules);
@@ -76,7 +87,7 @@ public class ScheduleService {
 
     public Date getDayFromSchedule(Schedule schedule) {
         try {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", new Locale("pl", "PL"));
             Date scheduleDate = format.parse(schedule.getWhen());
             return removeTime(scheduleDate);
         }catch (Exception exc){
@@ -86,21 +97,11 @@ public class ScheduleService {
 
     public Date getDateFromSchedule(Schedule schedule) {
         try {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", new Locale("pl", "PL"));
             return format.parse(schedule.getWhen());
         }catch (Exception exc){
             return null;
         }
-    }
-
-    public static Date removeTime(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
     }
 
     public long getDifferenceDays(Date d1, Date d2) {

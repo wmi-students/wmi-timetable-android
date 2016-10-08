@@ -20,6 +20,7 @@ import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import lombok.Setter;
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
@@ -166,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         MeetingListAdapter meetingArrayAdapter;
         ListView meetingListView;
 
-        @Setter
         Meeting meeting;
 
 
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             if(position < meetings.size()-1) {
                 Meeting meeting = meetings.get(position);
-                SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM");
+                SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM", new Locale("pl", "PL"));
                 return simpleDate.format(meeting.getDate());
             }else{
                 return "...";
