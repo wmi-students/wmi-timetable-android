@@ -44,7 +44,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
 
         if (view == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            view = vi.inflate(R.layout.meeting_list_item, null);
+            view = vi.inflate(R.layout.meeting_list_item, parent, false);
         }
 
         MeetingDay meetingDay = getItem(position);

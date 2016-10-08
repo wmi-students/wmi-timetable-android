@@ -39,7 +39,7 @@ public class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
 
         if (view == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            view = vi.inflate(R.layout.meeting_day_list_item, null);
+            view = vi.inflate(R.layout.meeting_day_list_item, parent, false);
         }
 
         Schedule schedule = getItem(position);
