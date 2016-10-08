@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
@@ -14,6 +14,7 @@ import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 
 public class ScheduleService {
+
     public ArrayList<Meeting> convertSchedulesToMeetings(ArrayList<Schedule> schedules){
         ArrayList<MeetingDay> meetingDays = groupSchedulesToMeetingDays(schedules);
         ArrayList<Meeting> meetings = groupMeetingDaysToMeetings(meetingDays);
@@ -22,7 +23,7 @@ public class ScheduleService {
 
     public ArrayList<MeetingDay> groupSchedulesToMeetingDays(ArrayList<Schedule> schedules) {
         // hash table do stworzenia dni zjazdu
-        Map<Date,MeetingDay> meetingDaysMap = new HashMap<>();
+        Map<Date,MeetingDay> meetingDaysMap = new TreeMap<>();
 
         for (Schedule schedule : schedules) {
             // pobranie dnia bez godzin i minut będzie kluczem
@@ -78,6 +79,15 @@ public class ScheduleService {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date scheduleDate = format.parse(schedule.getWhen());
             return removeTime(scheduleDate);
+        }catch (Exception exc){
+            return null;
+        }
+    }
+
+    public Date getDateFromSchedule(Schedule schedule) {
+        try {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            return format.parse(schedule.getWhen());
         }catch (Exception exc){
             return null;
         }
