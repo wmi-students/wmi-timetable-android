@@ -17,7 +17,7 @@ import retrofit.client.OkClient;
 
 public class SchedulesRestTask extends AsyncTask<Void, Void, ArrayList<Meeting>> {
 
-    private final String REST_URL = "http://wmitimetable.herokuapp.com";
+    public static final String REST_URL = "http://wmitimetable.herokuapp.com";
 
     @Override
     protected ArrayList<Meeting> doInBackground(Void... params) {
