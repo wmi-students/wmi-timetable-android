@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 
 public class SettingsService {
-    Activity activity;
+    private Activity activity;
     public SettingsService(Activity activity) {
         this.activity = activity;
     }

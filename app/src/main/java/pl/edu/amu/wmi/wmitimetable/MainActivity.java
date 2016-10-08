@@ -33,9 +33,9 @@ import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MainActivity extends AppCompatActivity {
 
-    DataService dataService;
-    SettingsService settingsService;
-    ArrayList<Meeting> meetings = new ArrayList<>();
+    private DataService dataService;
+    private SettingsService settingsService;
+    private ArrayList<Meeting> meetings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

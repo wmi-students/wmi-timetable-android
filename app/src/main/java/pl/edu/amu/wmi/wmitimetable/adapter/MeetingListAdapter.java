@@ -24,9 +24,9 @@ import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
 
 
-    ListView meetingDayListView;
-    MeetingDayListAdapter meetingDayArrayAdapter;
-    SettingsService settingsService;
+    private ListView meetingDayListView;
+    private MeetingDayListAdapter meetingDayArrayAdapter;
+    private SettingsService settingsService;
 
     public MeetingListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -62,7 +62,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
         return view;
     }
 
-    public ArrayList<Schedule> filterSchedules(ArrayList<Schedule> schedules) {
+    private ArrayList<Schedule> filterSchedules(ArrayList<Schedule> schedules) {
         ArrayList<Schedule> filteredSchedules = new ArrayList<>();
 
         for (Schedule schedule : schedules) {

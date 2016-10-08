@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class MeetingDay {
-    Date date;
-    ArrayList<Schedule> schedules = new ArrayList<>();
+    private Date date;
+    private ArrayList<Schedule> schedules = new ArrayList<>();
 
     public Date getDate() {
         return date;

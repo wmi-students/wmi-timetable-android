@@ -22,10 +22,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Spinner spinnerYear, spinnerStudy, spinnerGroup;
     private ProgressDialog dialog;
-    DataService dataService;
-    SettingsService settingsService;
-    Button buttonShowMeetings;
-    Button buttonReloadData;
+    private DataService dataService;
+    private SettingsService settingsService;
+    private Button buttonShowMeetings;
+    private Button buttonReloadData;
 
 
     @Override
@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         loadData();
     }
 
-    public void showButtons(int visibility){
+    private void showButtons(int visibility) {
         spinnerStudy.setVisibility(visibility);
         spinnerYear.setVisibility(visibility);
         spinnerGroup.setVisibility(visibility);
@@ -109,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), "Sprawdź połączenie internetowe :(", Snackbar.LENGTH_LONG).show();
     }
 
-    public void goMeetings(){
+    private void goMeetings() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

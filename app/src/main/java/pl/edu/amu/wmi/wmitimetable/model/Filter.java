@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Filter {
-    ArrayList<String> years = new ArrayList<>();
-    ArrayList<String> groups = new ArrayList<>();
-    ArrayList<String> studies = new ArrayList<>();
+    private ArrayList<String> years = new ArrayList<>();
+    private ArrayList<String> groups = new ArrayList<>();
+    private ArrayList<String> studies = new ArrayList<>();
 
     public boolean yearExists(String yearName){
         for (String year : years) {

@@ -13,8 +13,8 @@ public class World {
     //@Getter @Setter
     //private ArrayList<Schedule> schedules = new ArrayList<>();
 
-    Boolean loaded = false;
-    Filter filter = new Filter();
+    private Boolean loaded = false;
+    private Filter filter = new Filter();
     private ArrayList<Meeting> meetings = new ArrayList<>();
 
     private World(){

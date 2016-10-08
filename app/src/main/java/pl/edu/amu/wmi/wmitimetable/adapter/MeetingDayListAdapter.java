@@ -20,7 +20,7 @@ import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 
-public class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
+class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
 
     ScheduleService scheduleService = new ScheduleService();
 

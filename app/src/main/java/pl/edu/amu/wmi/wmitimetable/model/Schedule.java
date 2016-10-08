@@ -8,15 +8,15 @@ import lombok.Data;
 
 @Data
 public class Schedule implements Serializable {
-    int id;
-    String when;
-    String group;
-    String subject;
-    String year;
-    String study;
-    String leader;
-    String room1;
-    String room2;
+    private int id;
+    private String when;
+    private String group;
+    private String subject;
+    private String year;
+    private String study;
+    private String leader;
+    private String room1;
+    private String room2;
 
     public int getId() {
         return id;
