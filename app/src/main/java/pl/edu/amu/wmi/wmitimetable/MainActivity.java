@@ -218,9 +218,9 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             int offset = 0;
             for (Meeting meeting : meetings) {
-                if(meeting.getDate().before(DateTime.now().plusDays(-1).toDate())){
+                if (meeting.getDate().before(DateTime.now().plusDays(-2).toDate())) {
                     offset++;
-                }else{
+                } else {
                     break;
                 }
             }
