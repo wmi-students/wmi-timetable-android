@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -204,17 +203,22 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position < meetings.size() - 1) {
-                int offset = 0;
-                Meeting meeting = meetings.get(position);
+            int offset = 0;
+            for (Meeting meeting : meetings) {
                 if (meeting.getDate().before(DateTime.now().plusDays(-2).toDate())) {
                     offset++;
+                } else {
+                    break;
                 }
-                meeting = meetings.get(position + offset);
+            }
+            int meetingIndex = position + offset;
+            if (meetingIndex > meetings.size() - 1) {
+                return "...";
+            } else {
+                Meeting meeting = meetings.get(meetingIndex);
                 SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM", new Locale("pl", "PL"));
                 return simpleDate.format(meeting.getDate());
-            } else {
-                return "...";
+
             }
         }
     }
