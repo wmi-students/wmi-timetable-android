@@ -10,11 +10,13 @@ import lombok.Setter;
 public class World {
     private static World mInstance = null;
 
-    //@Getter @Setter
-    //private ArrayList<Schedule> schedules = new ArrayList<>();
-
+    @Getter @Setter
     private Boolean loaded = false;
+
+    @Getter
     private Filter filter = new Filter();
+
+    @Getter
     private ArrayList<Meeting> meetings = new ArrayList<>();
 
     private World(){
@@ -59,25 +61,9 @@ public class World {
         this.loaded = false;
     }
 
-    public ArrayList<Meeting> getMeetings() {
-        return meetings;
-    }
-
     public void setMeetings(ArrayList<Meeting> meetings) {
         this.meetings = meetings;
         createFiltersFromMeetings();
         loaded = true;
-    }
-
-    public Filter getFilter() {
-        return filter;
-    }
-
-    public Boolean getLoaded() {
-        return loaded;
-    }
-
-    public void setLoaded(boolean loaded) {
-        this.loaded = loaded;
     }
 }

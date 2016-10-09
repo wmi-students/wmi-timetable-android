@@ -1,6 +1,5 @@
 package pl.edu.amu.wmi.wmitimetable.task;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 
 import pl.edu.amu.wmi.wmitimetable.http.NullHostNameVerifier;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
-import pl.edu.amu.wmi.wmitimetable.model.World;
 import pl.edu.amu.wmi.wmitimetable.rest.ScheduleRestService;
 import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 import retrofit.RestAdapter;

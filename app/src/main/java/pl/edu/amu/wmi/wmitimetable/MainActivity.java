@@ -46,26 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        /*
-      The {@link android.support.v4.view.PagerAdapter} that will provide
-      fragments for each of the sections. We use a
-      {@link FragmentPagerAdapter} derivative, which will keep every
-      loaded fragment in memory. If this becomes too memory intensive, it
-      may be best to switch to a
-      {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         loadData();
 
-        // Set up the ViewPager with the sections adapter.
-        /*
-      The {@link ViewPager} that will host the section contents.
-     */
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
@@ -82,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Meeting> filteredMeetings = new ArrayList<>();
 
         for (Meeting meeting : meetings) {
-            if(meetingHasFiteredSchedules(meeting)){
+            if(meetingHasFilteredSchedules(meeting)){
                 filteredMeetings.add(meeting);
             }
         }
         return filteredMeetings;
     }
 
-    private boolean meetingHasFiteredSchedules(Meeting meeting) {
+    private boolean meetingHasFilteredSchedules(Meeting meeting) {
         for (MeetingDay meetingDay : meeting.getMeetingDays()) {
             for (Schedule schedule : meetingDay.getSchedules()) {
                 if(settingsService.scheduleInFilter(schedule)){
@@ -149,14 +133,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_MEETING = "meeting_object";
 
@@ -166,10 +143,6 @@ public class MainActivity extends AppCompatActivity {
         public PlaceholderFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber, Meeting meeting) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -196,10 +169,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
