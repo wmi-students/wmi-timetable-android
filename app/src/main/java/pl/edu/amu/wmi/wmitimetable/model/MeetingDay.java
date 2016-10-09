@@ -1,27 +1,12 @@
 package pl.edu.amu.wmi.wmitimetable.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import lombok.Data;
 
 @Data
-public class MeetingDay {
+public class MeetingDay implements Serializable {
     private Date date;
     private ArrayList<Schedule> schedules = new ArrayList<>();
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public ArrayList<Schedule> getSchedules() {
-        return schedules;
-    }
-
-    public void setSchedules(ArrayList<Schedule> schedules) {
-        this.schedules = schedules;
-    }
 }

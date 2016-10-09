@@ -9,20 +9,4 @@ import lombok.Data;
 public class Meeting implements Serializable {
     private Date date;
     private ArrayList<MeetingDay> meetingDays = new ArrayList<>();
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public ArrayList<MeetingDay> getMeetingDays() {
-        return meetingDays;
-    }
-
-    public void setMeetingDays(ArrayList<MeetingDay> meetingDays) {
-        this.meetingDays = meetingDays;
-    }
 }
