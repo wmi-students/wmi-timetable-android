@@ -4,11 +4,13 @@ import android.util.Log;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
+import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
+
 public class NullHostNameVerifier implements HostnameVerifier {
 
     @Override
     public boolean verify(String hostname, SSLSession session) {
-        if(!hostname.equals("wmitimetable.herokuapp.com")) {
+        if(!hostname.equals(SchedulesRestTask.REST_URL)) {
             Log.w("REST Client", "Not allowed certificate for " + hostname);
             return false;
         }else {

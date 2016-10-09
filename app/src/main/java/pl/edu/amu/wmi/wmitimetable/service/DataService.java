@@ -20,8 +20,8 @@ import pl.edu.amu.wmi.wmitimetable.model.World;
 
 public class DataService {
 
-    Gson gson;
-    Context context;
+    private Gson gson;
+    private Context context;
 
     private final String MEETINGS_FILE_NAME = "meetings.json";
 
@@ -61,15 +61,14 @@ public class DataService {
         }
     }
 
-    public void saveMeetingsToFile(ArrayList<Meeting> meetings) throws IOException{
+    private void saveMeetingsToFile(ArrayList<Meeting> meetings) throws IOException {
         String content = serializeMeetings(meetings);
         writeToFile(MEETINGS_FILE_NAME, content);
     }
 
-    public ArrayList<Meeting> loadMeetingsFromFile() throws IOException{
+    private ArrayList<Meeting> loadMeetingsFromFile() throws IOException {
         String content = readFromFile(MEETINGS_FILE_NAME);
-        ArrayList<Meeting> meetings = deserializeMeetings(content);
-        return meetings;
+        return deserializeMeetings(content);
     }
 
     private ArrayList<Meeting> deserializeMeetings(String content) {
@@ -110,7 +109,7 @@ public class DataService {
         return gson.toJson(meetings);
     }
 
-    public void writeToFile(String fileName, String content) throws IOException {
+    private void writeToFile(String fileName, String content) throws IOException {
         FileOutputStream outputStream = this.context.openFileOutput(fileName, Context.MODE_PRIVATE);
         outputStream.write(content.getBytes());
         outputStream.close();

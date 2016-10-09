@@ -6,6 +6,22 @@ import lombok.Data;
 
 @Data
 public class Meeting {
-    Date date;
-    ArrayList<MeetingDay> meetingDays = new ArrayList<>();
+    private Date date;
+    private ArrayList<MeetingDay> meetingDays = new ArrayList<>();
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public ArrayList<MeetingDay> getMeetingDays() {
+        return meetingDays;
+    }
+
+    public void setMeetingDays(ArrayList<MeetingDay> meetingDays) {
+        this.meetingDays = meetingDays;
+    }
 }
