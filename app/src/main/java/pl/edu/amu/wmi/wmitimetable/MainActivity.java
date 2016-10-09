@@ -22,12 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import lombok.Setter;
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
-import pl.edu.amu.wmi.wmitimetable.model.World;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
@@ -165,9 +163,6 @@ public class MainActivity extends AppCompatActivity {
         MeetingListAdapter meetingArrayAdapter;
         ListView meetingListView;
 
-        Meeting meeting;
-
-
         public PlaceholderFragment() {
         }
 
@@ -179,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putSerializable(ARG_MEETING, meeting);
             fragment.setArguments(args);
-            fragment.setMeeting(meeting);
             return fragment;
         }
 
@@ -189,7 +184,8 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
+            int position = getArguments().getInt(ARG_SECTION_NUMBER);
+            Meeting meeting = (Meeting) getArguments().getSerializable(ARG_MEETING);
 
             meetingListView = (ListView) rootView.findViewById(R.id.list_meeting_days);
             ArrayList<MeetingDay> meetingDays = meeting.getMeetingDays();
@@ -197,10 +193,6 @@ public class MainActivity extends AppCompatActivity {
             meetingListView.setAdapter(meetingArrayAdapter);
 
             return rootView;
-        }
-
-        public void setMeeting(Meeting meeting) {
-            this.meeting = meeting;
         }
     }
 
