@@ -5,15 +5,19 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
+import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
+import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
@@ -37,7 +41,32 @@ public class SettingsActivity extends AppCompatActivity {
         settingRootView.setBackgroundColor(getResources().getColor(R.color.colorSettingsBackground));
 
         spinnerYear = (Spinner) findViewById(R.id.spinnerYear);
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                loadGroups();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
+        });
+
         spinnerStudy = (Spinner) findViewById(R.id.spinnerStudy);
+        spinnerStudy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                loadGroups();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
+        });
+
+
         spinnerGroup = (Spinner) findViewById(R.id.spinnerGroup);
 
         buttonShowMeetings = (Button) findViewById(R.id.buttonShowMeetings);
@@ -155,12 +184,47 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void loadGroups() {
-        ArrayAdapter<String> dataAdapterGroups = new ArrayAdapter<>(this, R.layout.settings_spinner_item, dataService.getFilter().getGroups());
+        ArrayList<String> unfilteredGroups = new ArrayList<>(dataService.getFilter().getGroups());
+        ArrayAdapter<String> dataAdapterGroups = new ArrayAdapter<>(this, R.layout.settings_spinner_item, unfilteredGroups);
         dataAdapterGroups.setDropDownViewResource(R.layout.settings_spinner_dropdown_item);
+        checkGroupExistence(dataAdapterGroups);
         spinnerGroup.setAdapter(dataAdapterGroups);
         String group = settingsService.loadSetting("group");
-        if(group != null) {
+        if (group != null) {
             spinnerGroup.setSelection(dataAdapterGroups.getPosition(group));
         }
+    }
+
+    private void checkGroupExistence(ArrayAdapter<String> dataAdapterGroups) {
+        Map<String, Boolean> groupMap = new HashMap<>();
+
+        for (String group : dataService.getFilter().getGroups()) {
+            if (!groupMap.containsKey(group)) {
+                groupMap.put(group, false);
+            }
+        }
+
+        for (Map.Entry group : groupMap.entrySet()) {
+            group.setValue(checkGroup((String) group.getKey(), (String) spinnerStudy.getSelectedItem(), (String) spinnerYear.getSelectedItem())); //toString() returns object unequal to class Schedule
+            if (!((Boolean) group.getValue())) {
+                dataAdapterGroups.remove(group.getKey().toString());
+                dataAdapterGroups.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private boolean checkGroup(String groupName, String selectedStudy, String selectedYear) {
+        ArrayList<Meeting> meetings = dataService.getMeetings();
+
+        for (Meeting meeting : meetings) {
+            for (MeetingDay meetingDay : meeting.getMeetingDays()) {
+                for (Schedule schedule : meetingDay.getSchedules()) {
+                    if (groupName.equals(schedule.getGroup()) && selectedStudy.equals(schedule.getStudy()) && selectedYear.equals(schedule.getYear())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
