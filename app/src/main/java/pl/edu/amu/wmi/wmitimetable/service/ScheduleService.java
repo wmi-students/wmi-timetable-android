@@ -1,5 +1,7 @@
 package pl.edu.amu.wmi.wmitimetable.service;
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,5 +108,9 @@ public class ScheduleService {
     private long getDifferenceDays(Date d1, Date d2) {
         long diff = d2.getTime() - d1.getTime();
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    public Date getScheduleEndDate(Date scheduleDate) {
+        return new DateTime(scheduleDate).plusMinutes(135).toDate();
     }
 }

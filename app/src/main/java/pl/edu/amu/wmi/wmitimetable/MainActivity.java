@@ -22,12 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import lombok.Setter;
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
-import pl.edu.amu.wmi.wmitimetable.model.World;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
@@ -48,29 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        /*
-      The {@link android.support.v4.view.PagerAdapter} that will provide
-      fragments for each of the sections. We use a
-      {@link FragmentPagerAdapter} derivative, which will keep every
-      loaded fragment in memory. If this becomes too memory intensive, it
-      may be best to switch to a
-      {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         loadData();
 
-        // Set up the ViewPager with the sections adapter.
-        /*
-      The {@link ViewPager} that will host the section contents.
-     */
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -84,14 +65,14 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Meeting> filteredMeetings = new ArrayList<>();
 
         for (Meeting meeting : meetings) {
-            if(meetingHasFiteredSchedules(meeting)){
+            if(meetingHasFilteredSchedules(meeting)){
                 filteredMeetings.add(meeting);
             }
         }
         return filteredMeetings;
     }
 
-    private boolean meetingHasFiteredSchedules(Meeting meeting) {
+    private boolean meetingHasFilteredSchedules(Meeting meeting) {
         for (MeetingDay meetingDay : meeting.getMeetingDays()) {
             for (Schedule schedule : meetingDay.getSchedules()) {
                 if(settingsService.scheduleInFilter(schedule)){
@@ -151,36 +132,22 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_MEETING = "meeting_object";
 
         MeetingListAdapter meetingArrayAdapter;
         ListView meetingListView;
 
-        Meeting meeting;
-
-
         public PlaceholderFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber, Meeting meeting) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putSerializable(ARG_MEETING, meeting);
             fragment.setArguments(args);
-            fragment.setMeeting(meeting);
             return fragment;
         }
 
@@ -189,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
+            int position = getArguments().getInt(ARG_SECTION_NUMBER);
+            Meeting meeting = (Meeting) getArguments().getSerializable(ARG_MEETING);
 
             meetingListView = (ListView) rootView.findViewById(R.id.list_meeting_days);
             ArrayList<MeetingDay> meetingDays = meeting.getMeetingDays();
@@ -198,16 +166,8 @@ public class MainActivity extends AppCompatActivity {
 
             return rootView;
         }
-
-        public void setMeeting(Meeting meeting) {
-            this.meeting = meeting;
-        }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -243,17 +203,22 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position < meetings.size() - 1) {
-                int offset = 0;
-                Meeting meeting = meetings.get(position);
+            int offset = 0;
+            for (Meeting meeting : meetings) {
                 if (meeting.getDate().before(DateTime.now().plusDays(-2).toDate())) {
                     offset++;
+                } else {
+                    break;
                 }
-                meeting = meetings.get(position + offset);
+            }
+            int meetingIndex = position + offset;
+            if (meetingIndex > meetings.size() - 1) {
+                return "...";
+            } else {
+                Meeting meeting = meetings.get(meetingIndex);
                 SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM", new Locale("pl", "PL"));
                 return simpleDate.format(meeting.getDate());
-            } else {
-                return "...";
+
             }
         }
     }

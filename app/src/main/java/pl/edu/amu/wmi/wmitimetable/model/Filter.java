@@ -6,8 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Filter {
+
+    @Getter @Setter
     private ArrayList<String> years = new ArrayList<>();
+
+    @Getter @Setter
     private ArrayList<String> groups = new ArrayList<>();
+
+    @Getter @Setter
     private ArrayList<String> studies = new ArrayList<>();
 
     public boolean yearExists(String yearName){
@@ -41,29 +47,5 @@ public class Filter {
         years = new ArrayList<>();
         groups = new ArrayList<>();
         studies = new ArrayList<>();
-    }
-
-    public ArrayList<String> getYears() {
-        return years;
-    }
-
-    public void setYears(ArrayList<String> years) {
-        this.years = years;
-    }
-
-    public ArrayList<String> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(ArrayList<String> groups) {
-        this.groups = groups;
-    }
-
-    public ArrayList<String> getStudies() {
-        return studies;
-    }
-
-    public void setStudies(ArrayList<String> studies) {
-        this.studies = studies;
     }
 }

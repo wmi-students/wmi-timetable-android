@@ -14,8 +14,6 @@ import java.util.ArrayList;
 
 import pl.edu.amu.wmi.wmitimetable.model.Filter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
-import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
-import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.model.World;
 
 public class DataService {

@@ -1,6 +1,7 @@
 package pl.edu.amu.wmi.wmitimetable.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 
 import pl.edu.amu.wmi.wmitimetable.R;
-import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 
@@ -53,11 +53,26 @@ class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         Date date = scheduleService.getDateFromSchedule(schedule);
         textTime.setText(format.format(date));
 
+        if(scheduleIsNow(date)){
+            view.setBackgroundResource(R.color.colorAccent);
+            textTime.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
+            textGroup.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
+            textRoom.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
+            textSubject.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
+        }
+
         textRoom.setText(schedule != null ? schedule.getRoom1() : null);
         textGroup.setText(schedule.getGroup());
         textSubject.setText(schedule.getSubject());
 
         return view;
+    }
+
+    private boolean scheduleIsNow(Date scheduleDate) {
+        Date start = scheduleDate;
+        Date end = scheduleService.getScheduleEndDate(scheduleDate);
+        Date now = DateTime.now().toDate();
+        return  now.after(start) && now.before(end);
     }
 
 }
