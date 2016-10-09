@@ -1,0 +1,31 @@
+Korzystaj¹c w jakikolwiek sposób z aplikacji mobilnej U¿ytkownik akceptuje zasady zawarte w niniejszej Polityce Prywatnoœci.
+ 
+WMI Timetable bez zgody U¿ytkownika nie zbiera danych osobowych, a wy³¹cznie dane nie posiadaj¹ce takiego przymiotu, w szczególnoœci dane demograficzne i dane dotycz¹ce u¿ytkowania aplikacji mobilnej. 
+ 
+Dane zbierane automatycznie: 
+Podczas korzystania z aplikacji mobilnej automatycznie zbierane s¹ dane demograficzne U¿ytkownika. Statystyki u¿ycia aplikacji, itp., dane te nie s¹ danymi osobowymi i nie pozwalaj¹ na jednoznaczne zidentyfikowanie osoby U¿ytkownika.
+ 
+Wykorzystywanie danych:
+Dane zbierane automatycznie mog¹ byæ u¿yte do analizy zachowañ u¿ytkowników aplikacji mobilnej lub te¿ do zbierania danych demograficznych o naszych u¿ytkownikach.
+ 
+Sposoby zbierania danych:
+WMI Timetable zbiera automatycznie dane dotycz¹ce u¿ytkowników aplikacji mobilnych przy u¿yciu zewnêtrznych systemów analitycznych, takich jak: Google Analytics for Mobile, zgodnie z warunkami korzystania z tych narzêdzi i zgodnie z ich politykami prywatnoœci dostêpnymi na odpowiednich stronach internetowych.
+ 
+Dane na temat dzieci:
+Aplikacja ta jest przeznaczona do u¿ytkowania przez dzieci. Jeœli U¿ytkownik ma mniej ni¿ 18 lat, mo¿e korzystaæ z tej Aplikacji wy³¹cznie pod nadzorem rodzica lub opiekuna prawnego. W celu ochrony prywatnoœci dzieci w sieci i niniejszej Polityki Prywatnoœci WMI Timetable nie mo¿e:
+ 
+(1) ¯¹daæ lub œwiadomie gromadziæ danych osobowych osób poni¿ej 13 roku ¿ycia ("Dzieci"),
+ 
+(2) œwiadomie wykorzystywaæ i przekazywaæ stronom trzecim danych osobowych osób poni¿ej 13 roku ¿ycia,
+ 
+(3) Udzielaæ dzieciom mo¿liwoœci publicznego umieszczania lub w jakikolwiek inny sposób rozpowszechniania danych osobowych, oraz
+ 
+(4) Nak³aniaæ dzieci do udzia³u w specjalnych grach, konkursach z nagrodami i w innych czynnoœciach maj¹cych na celu ujawnienie danych osobowych.
+ 
+WMI Timetable nie gromadzi œwiadomie informacji o dzieciach i wymaga zgody rodziców na ujawnianie jakichkolwiek danych osobowych. Zachêcamy do kontrolowania korzystania z Internetu przez dzieci oraz do zapoznania siê z odpowiednimi zasadami bezpieczeñstwa zanim dziecko rozpocznie korzystanie z zasobów Internetu.
+ 
+Dodatkowe informacje:
+Niniejsza Polityka Prywatnoœci ma jedynie charakter uzupe³niaj¹cy w stosunku do polityki prywatnoœci Apple Store i Google Play. WMI Timetable nie ponosi jakiejkolwiek odpowiedzialnoœci za politykê prywatnoœci Apple Store i Google Play oraz przestrzeganie przepisów Ustawy o ochronie danych osobowych oraz Ustawy o œwiadczeniu us³ug drog¹ elektroniczn¹ w ramach Apple Store i Google Play.
+ 
+Kontakt:
+W przypadku pytañ Uzytkownika dotycz¹cych niniejszej Polityki Prywatnoœci prosimy o wysy³anie maila na adres:  info@polskiemedia.com
