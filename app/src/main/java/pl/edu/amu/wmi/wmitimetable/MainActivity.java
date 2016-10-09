@@ -241,14 +241,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position < meetings.size()-1) {
+            if (position < meetings.size() - 1) {
+                int offset = 0;
                 Meeting meeting = meetings.get(position);
+                if (meeting.getDate().before(DateTime.now().plusDays(-2).toDate())) {
+                    offset++;
+                }
+                meeting = meetings.get(position + offset);
                 SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM", new Locale("pl", "PL"));
                 return simpleDate.format(meeting.getDate());
-            }else{
+            } else {
                 return "...";
             }
         }
