@@ -19,9 +19,7 @@
 
     <ListView
         android:id="@+id/list_schedules"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
         android:isScrollContainer="false"
         android:layout_height="131dp" />
 

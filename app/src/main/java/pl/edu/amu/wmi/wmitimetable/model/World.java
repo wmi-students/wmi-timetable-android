@@ -13,13 +13,20 @@ public class World {
     //@Getter @Setter
     //private ArrayList<Schedule> schedules = new ArrayList<>();
 
-    @Getter @Setter
-    Boolean loaded = false;
+    private Boolean loaded = false;
+    private Filter filter = new Filter();
+    private ArrayList<Meeting> meetings = new ArrayList<>();
 
-    public void setMeetings(ArrayList<Meeting> meetings) {
-        this.meetings = meetings;
-        createFiltersFromMeetings();
-        loaded = true;
+    private World(){
+
+    }
+
+    public static World getInstance(){
+        if(mInstance == null)
+        {
+            mInstance = new World();
+        }
+        return mInstance;
     }
 
     private void createFiltersFromMeetings() {
@@ -52,20 +59,25 @@ public class World {
         this.loaded = false;
     }
 
-    @Getter
-    private ArrayList<Meeting> meetings = new ArrayList<>();
-
-    @Getter
-    Filter filter = new Filter();
-
-    private World(){
-
+    public ArrayList<Meeting> getMeetings() {
+        return meetings;
     }
-    public static World getInstance(){
-        if(mInstance == null)
-        {
-            mInstance = new World();
-        }
-        return mInstance;
+
+    public void setMeetings(ArrayList<Meeting> meetings) {
+        this.meetings = meetings;
+        createFiltersFromMeetings();
+        loaded = true;
+    }
+
+    public Filter getFilter() {
+        return filter;
+    }
+
+    public Boolean getLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
     }
 }

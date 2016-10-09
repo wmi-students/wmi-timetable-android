@@ -20,6 +20,7 @@ import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import lombok.Setter;
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
@@ -32,24 +33,9 @@ import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MainActivity extends AppCompatActivity {
 
-    DataService dataService;
-    SettingsService settingsService;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
-    ArrayList<Meeting> meetings = new ArrayList<>();
+    private DataService dataService;
+    private SettingsService settingsService;
+    private ArrayList<Meeting> meetings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +50,25 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         loadData();
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
 
@@ -168,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
         MeetingListAdapter meetingArrayAdapter;
         ListView meetingListView;
 
-        @Setter
         Meeting meeting;
 
 
@@ -195,12 +191,16 @@ public class MainActivity extends AppCompatActivity {
 
             int pageNr = getArguments().getInt(ARG_SECTION_NUMBER);
 
-            meetingListView = (ListView)  rootView.findViewById(R.id.list_meeting_days);
-            ArrayList<MeetingDay> meetingDays =  meeting.getMeetingDays();
-            meetingArrayAdapter = new MeetingListAdapter(getActivity(),R.layout.meeting_list_item,meetingDays);
+            meetingListView = (ListView) rootView.findViewById(R.id.list_meeting_days);
+            ArrayList<MeetingDay> meetingDays = meeting.getMeetingDays();
+            meetingArrayAdapter = new MeetingListAdapter(getActivity(), R.layout.meeting_list_item, meetingDays);
             meetingListView.setAdapter(meetingArrayAdapter);
 
             return rootView;
+        }
+
+        public void setMeeting(Meeting meeting) {
+            this.meeting = meeting;
         }
     }
 
@@ -218,9 +218,9 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             int offset = 0;
             for (Meeting meeting : meetings) {
-                if(meeting.getDate().before(DateTime.now().plusDays(-1).toDate())){
+                if (meeting.getDate().before(DateTime.now().plusDays(-2).toDate())) {
                     offset++;
-                }else{
+                } else {
                     break;
                 }
             }
@@ -241,14 +241,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position < meetings.size()-1) {
+            if (position < meetings.size() - 1) {
+                int offset = 0;
                 Meeting meeting = meetings.get(position);
-                SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM");
+                if (meeting.getDate().before(DateTime.now().plusDays(-2).toDate())) {
+                    offset++;
+                }
+                meeting = meetings.get(position + offset);
+                SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM", new Locale("pl", "PL"));
                 return simpleDate.format(meeting.getDate());
-            }else{
+            } else {
                 return "...";
             }
         }

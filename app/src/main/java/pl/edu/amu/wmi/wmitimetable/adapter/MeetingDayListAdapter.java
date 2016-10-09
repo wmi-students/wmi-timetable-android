@@ -13,13 +13,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import pl.edu.amu.wmi.wmitimetable.R;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 
-public class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
+class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
 
     ScheduleService scheduleService = new ScheduleService();
 
@@ -38,7 +39,7 @@ public class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
 
         if (view == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            view = vi.inflate(R.layout.meeting_day_list_item, null);
+            view = vi.inflate(R.layout.meeting_day_list_item, parent, false);
         }
 
         Schedule schedule = getItem(position);
@@ -48,11 +49,11 @@ public class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         TextView textRoom = (TextView) view.findViewById(R.id.schedule_room);
         TextView textSubject = (TextView) view.findViewById(R.id.schedule_subject);
 
-        DateFormat format = new SimpleDateFormat("HH:mm");
+        DateFormat format = new SimpleDateFormat("HH:mm", new Locale("pl", "PL"));
         Date date = scheduleService.getDateFromSchedule(schedule);
         textTime.setText(format.format(date));
 
-        textRoom.setText(schedule.getRoom1());
+        textRoom.setText(schedule != null ? schedule.getRoom1() : null);
         textGroup.setText(schedule.getGroup());
         textSubject.setText(schedule.getSubject());
 
