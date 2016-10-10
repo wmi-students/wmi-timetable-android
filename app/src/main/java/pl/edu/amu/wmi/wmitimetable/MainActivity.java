@@ -31,6 +31,7 @@ import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String ARG_MEETINGS = "meetings_object";
     private DataService dataService;
     private SettingsService settingsService;
     private ArrayList<Meeting> meetings = new ArrayList<>();
@@ -48,13 +49,23 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        loadData();
+        if (savedInstanceState == null) {
+            loadData();
+        } else {
+            meetings = (ArrayList<Meeting>) savedInstanceState.getSerializable(ARG_MEETINGS);
+        }
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable(ARG_MEETINGS, meetings);
     }
 
     private void loadData() {
