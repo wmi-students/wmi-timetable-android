@@ -54,11 +54,11 @@ class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         textTime.setText(format.format(date));
 
         if(scheduleIsNow(date)){
-            view.setBackgroundResource(R.color.colorAccent);
-            textTime.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
-            textGroup.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
-            textRoom.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
-            textSubject.setTextColor(getContext().getResources().getColor(R.color.colorTextLight));
+            //view.setBackgroundResource(R.color.colorActive);
+            textTime.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+            textGroup.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+            textRoom.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+            textSubject.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
         }
 
         textRoom.setText(schedule != null ? schedule.getRoom1() : null);

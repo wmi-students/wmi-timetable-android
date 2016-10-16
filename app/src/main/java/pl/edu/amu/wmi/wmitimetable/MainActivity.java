@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
@@ -57,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TextView textStudy = (TextView)findViewById(R.id.filter_study);
+        TextView textYear = (TextView)findViewById(R.id.filter_year);
+        TextView textGroup = (TextView)findViewById(R.id.filter_group);
+
+        textStudy.setText("Kierunek: "+settingsService.loadSetting("study"));
+        textYear.setText("Rok: "+settingsService.loadSetting("year"));
+        textGroup.setText("Kierunek: "+settingsService.loadSetting("group"));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
