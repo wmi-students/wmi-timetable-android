@@ -2,11 +2,13 @@
 <resources>
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorSettingsBackground">#37d6b6</color>
+    <color name="colorAccent">#00fff4</color>
+    <color name="colorSettingsBackground">#2c3e50</color>
     <color name="colorSettingsForeground">#ffffff</color>
     <color name="colorSettingsDropDown">#4fe3c1</color>
     <color name="colorSectionGray">#c0c0c0</color>
     <color name="colorTextLight">#ffffff</color>
+    <color name="colorActive">#FF3F5770</color>
+
 
 </resources>

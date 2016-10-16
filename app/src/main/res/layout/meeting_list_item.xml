@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="14dp"
         android:textStyle="bold"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/shape_gradient_day_header"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:textColor="@color/colorSettingsForeground"
@@ -21,6 +21,8 @@
         android:id="@+id/list_schedules"
         android:layout_width="match_parent"
         android:isScrollContainer="false"
+        android:divider="@drawable/shape_gradient_schedule_divider"
+        android:dividerHeight="1dp"
         android:layout_height="131dp" />
 
 </LinearLayout>

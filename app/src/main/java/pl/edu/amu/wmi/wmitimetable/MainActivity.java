@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
@@ -31,6 +32,7 @@ import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String ARG_MEETINGS = "meetings_object";
     private DataService dataService;
     private SettingsService settingsService;
     private ArrayList<Meeting> meetings = new ArrayList<>();
@@ -48,13 +50,31 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        loadData();
+        if (savedInstanceState == null) {
+            loadData();
+        } else {
+            meetings = (ArrayList<Meeting>) savedInstanceState.getSerializable(ARG_MEETINGS);
+        }
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        TextView textStudy = (TextView)findViewById(R.id.filter_study);
+        TextView textYear = (TextView)findViewById(R.id.filter_year);
+        TextView textGroup = (TextView)findViewById(R.id.filter_group);
+
+        textStudy.setText("Kierunek: "+settingsService.loadSetting("study"));
+        textYear.setText("Rok: "+settingsService.loadSetting("year"));
+        textGroup.setText("Kierunek: "+settingsService.loadSetting("group"));
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable(ARG_MEETINGS, meetings);
     }
 
     private void loadData() {
