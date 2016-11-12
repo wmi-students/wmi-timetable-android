@@ -124,6 +124,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if(id == R.id.action_about) {
+            showAbout();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -147,8 +151,17 @@ public class MainActivity extends AppCompatActivity {
         goSettings();
     }
 
+    private void showAbout() {
+        goAbout();
+    }
+
     private void goSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void goAbout() {
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
