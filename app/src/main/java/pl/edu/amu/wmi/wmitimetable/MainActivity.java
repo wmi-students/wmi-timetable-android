@@ -199,6 +199,12 @@ public class MainActivity extends AppCompatActivity {
 
             return rootView;
         }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            meetingArrayAdapter.notifyDataSetChanged();
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
