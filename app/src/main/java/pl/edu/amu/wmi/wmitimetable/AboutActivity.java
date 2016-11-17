@@ -23,7 +23,7 @@ public class AboutActivity extends AppCompatActivity {
             "Wojciech Klessa <info@polskiemedia.com>",
             "Szymon Michalczyk <szymon@szymonmichalczyk.com>",
             "Kacper Pieszyk <kacpie@st.amu.edu.pl>",
-            "Andriej Golec-Jarociński"
+            "Wojciech Łoza"
     };
 
     @Override
