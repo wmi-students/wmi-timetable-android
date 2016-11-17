@@ -3,12 +3,12 @@
     <string name="app_short_name">WMI Plan</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_reset">Resetuj dane</string>
-    <string name="action_about">O nas</string>
+    <string name="action_about">Autorzy</string>
     <string name="spinner_prompt_year">Wybierz rok</string>
     <string name="spinner_prompt_study">Wybierz kierunek</string>
     <string name="spinner_prompt_group">Wybierz grupę ćwiczeniową</string>
     <string name="spinner_prompt_semester">Wybierz semestr</string>
-    <string name="title_activity_about">O nas</string>
+    <string name="title_activity_about">Autorzy</string>
     <string name="about_version">Wersja: %1$s</string>
     <string name="about_authors">Autorzy</string>
     <string name="about_build_time">%1$s</string>
