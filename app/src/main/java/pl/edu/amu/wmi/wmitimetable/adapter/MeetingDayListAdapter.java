@@ -1,7 +1,7 @@
 package pl.edu.amu.wmi.wmitimetable.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,12 +53,12 @@ class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         Date date = scheduleService.getDateFromSchedule(schedule);
         textTime.setText(format.format(date));
 
-        if(scheduleIsNow(date)){
+        if (scheduleIsNow(date)) {
             //view.setBackgroundResource(R.color.colorActive);
-            textTime.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-            textGroup.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-            textRoom.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-            textSubject.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+            textTime.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            textGroup.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            textRoom.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            textSubject.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         }
 
         textRoom.setText(schedule != null ? schedule.getRoom1() : null);
