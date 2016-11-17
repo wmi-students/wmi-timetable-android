@@ -12,7 +12,7 @@
     android:background="@drawable/settings_background">
 
     <Button
-        android:text="Pokaż zajęcia"
+        android:text="@string/show_meetings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/buttonShowMeetings"

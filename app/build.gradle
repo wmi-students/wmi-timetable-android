@@ -5,6 +5,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "pl.edu.amu.wmi.wmitimetable"
+        buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 3
