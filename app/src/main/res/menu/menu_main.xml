@@ -3,15 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.edu.amu.wmi.wmitimetable.MainActivity">
     <item
-        android:id="@+id/action_reset"
-        android:orderInCategory="100"
-        android:title="@string/action_reset"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never|always"
+        android:icon="@drawable/ic_action_filters" />
+    <item
+        android:id="@+id/action_reset"
+        android:orderInCategory="100"
+        android:title="@string/action_reset"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_name" />
     <item
         android:id="@+id/action_about"
         android:orderInCategory="100"
