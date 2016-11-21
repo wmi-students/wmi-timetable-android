@@ -50,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        if (dataService.isDataFile() && settingsService.settingsExists()) {
+            dataService.loadMeetings();
+        }else {
+            goSettings();
+            return;
+        }
+
         if (savedInstanceState == null) {
             loadData();
         } else {
