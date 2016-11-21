@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         textStudy.setText("Kierunek: "+settingsService.loadSetting("study"));
         textYear.setText("Rok: "+settingsService.loadSetting("year"));
-        textGroup.setText("Kierunek: "+settingsService.loadSetting("group"));
+        textGroup.setText("Grupa: "+settingsService.loadSetting("group"));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);

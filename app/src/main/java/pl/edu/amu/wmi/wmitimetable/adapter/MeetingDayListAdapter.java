@@ -61,11 +61,23 @@ class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
             textSubject.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         }
 
-        textRoom.setText(schedule != null ? schedule.getRoom1() : null);
+        String roomInfo = schedule.getRoom1();
+        String room2 = normalizeString(schedule.getRoom2());
+        if(!room2.isEmpty()){
+            roomInfo += " " + room2;
+        }
+
+
+        textRoom.setText(roomInfo);
         textGroup.setText(schedule.getGroup());
         textSubject.setText(schedule.getSubject());
 
         return view;
+    }
+
+    private String normalizeString(String text) {
+        text = text.replace("\u00A0", "");
+        return text;
     }
 
     private boolean scheduleIsNow(Date scheduleDate) {
