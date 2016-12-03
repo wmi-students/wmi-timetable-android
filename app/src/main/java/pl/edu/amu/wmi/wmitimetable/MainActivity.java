@@ -1,14 +1,16 @@
 package pl.edu.amu.wmi.wmitimetable;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +21,10 @@ import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
@@ -29,6 +33,7 @@ import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
+import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        final SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         if (dataService.isDataFile() && settingsService.settingsExists()) {
             dataService.loadMeetings();
-        }else {
+        } else {
             goSettings();
             return;
         }
@@ -76,6 +81,44 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        if (settingsService.settingsOutdated()) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    BackgroundLoadData backgroundLoadData = new BackgroundLoadData(mSectionsPagerAdapter);
+                    backgroundLoadData.execute();
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
+                    Date today = new Date();
+                    settingsService.saveSetting("loadDate", format.format(today));
+                }
+            });
+        }
+    }
+
+    private class BackgroundLoadData extends SchedulesRestTask {
+        SectionsPagerAdapter mSectionsPagerAdapter;
+
+        public BackgroundLoadData(SectionsPagerAdapter mSectionsPagerAdapter) {
+            super();
+            this.mSectionsPagerAdapter = mSectionsPagerAdapter;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Meeting> meetings) {
+            super.onPostExecute(meetings);
+            dataService.setMeetings(meetings);
+            dataService.saveMeetings();
+            loadData();
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.data_updated, Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
     @Override
@@ -210,11 +253,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResume() {
             super.onResume();
+            update();
+        }
+
+        private void update() {
             meetingArrayAdapter.notifyDataSetChanged();
         }
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -239,6 +286,11 @@ public class MainActivity extends AppCompatActivity {
                 meeting = meetings.get(meetingIndex);
             }
             return PlaceholderFragment.newInstance(meetingIndex, meeting);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE; // when you call notifyDataSetChanged() the view pager will remove all views and reload them all. @see BackgroundLoadData
         }
 
         @Override

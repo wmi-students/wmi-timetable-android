@@ -13,4 +13,5 @@
     <string name="about_authors">Autorzy</string>
     <string name="about_build_time">%1$s</string>
     <string name="show_meetings">Pokaż zajęcia</string>
+    <string name="data_updated">Zaktualizowano dane.</string>
 </resources>
