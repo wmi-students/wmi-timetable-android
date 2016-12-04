@@ -46,14 +46,11 @@ public class SettingsService {
     }
 
     public boolean settingsOutdated() {
-        DateTime currentDate = new DateTime();
         try {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
             Date importDate = format.parse(loadSetting("loadDate"));
             DateTime dt = new DateTime(importDate);
-            int days = Days.daysBetween(dt, currentDate).getDays();
-            boolean result = days >= 2 ? true : false;
-            return result;
+            return Days.daysBetween(dt, new DateTime()).getDays() > 2 ? true : false;
         } catch (ParseException e) {
             Log.e("SettingsService", e.getMessage());
             return true;
