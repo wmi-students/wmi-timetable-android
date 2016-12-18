@@ -11,8 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
@@ -127,6 +131,9 @@ public class SettingsActivity extends AppCompatActivity {
             }else {
                 dataService.setMeetings(meetings);
                 dataService.saveMeetings();
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
+                Date today = new Date();
+                settingsService.saveSetting("loadDate", format.format(today));
 
                 loadFilters();
                 showButtons(View.VISIBLE);
