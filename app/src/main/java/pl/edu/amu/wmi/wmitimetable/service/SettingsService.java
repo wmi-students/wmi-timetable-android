@@ -45,15 +45,18 @@ public class SettingsService {
         return loadSetting("study") != null;
     }
 
-    public boolean settingsOutdated() {
+    public Date getDataDate(){
         try {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
-            Date importDate = format.parse(loadSetting("loadDate"));
-            DateTime dt = new DateTime(importDate);
-            return Days.daysBetween(dt, new DateTime()).getDays() > 2 ? true : false;
+            return format.parse(loadSetting("loadDate"));
         } catch (ParseException e) {
             Log.e("SettingsService", e.getMessage());
-            return true;
+            return null;
         }
+    }
+
+    public  void setDataDate(Date date){
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
+        saveSetting("loadDate", format.format(date));
     }
 }

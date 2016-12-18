@@ -1,7 +1,6 @@
 package pl.edu.amu.wmi.wmitimetable;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -20,8 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private DataService dataService;
     private SettingsService settingsService;
     private ArrayList<Meeting> meetings = new ArrayList<>();
+    private SectionsPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         if (dataService.isDataFile() && settingsService.settingsExists()) {
             dataService.loadMeetings();
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             meetings = (ArrayList<Meeting>) savedInstanceState.getSerializable(ARG_MEETINGS);
         }
 
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(pagerAdapter);
 
         TextView textStudy = (TextView)findViewById(R.id.filter_study);
         TextView textYear = (TextView)findViewById(R.id.filter_year);
@@ -80,33 +80,34 @@ public class MainActivity extends AppCompatActivity {
         textGroup.setText("Grupa: "+settingsService.loadSetting("group"));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
-        if (settingsService.settingsOutdated()) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    BackgroundLoadData backgroundLoadData = new BackgroundLoadData(mSectionsPagerAdapter);
-                    backgroundLoadData.execute();
-                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
-                    Date today = new Date();
-                    settingsService.saveSetting("loadDate", format.format(today));
-                }
-            });
+        refreshDataIfNewer();
+    }
+
+    private void refreshDataIfNewer() {
+        if (dataOutdated()) {
+            new BackgroundLoadData(pagerAdapter).execute();
         }
     }
 
-    private class BackgroundLoadData extends SchedulesRestTask {
-        SectionsPagerAdapter mSectionsPagerAdapter;
+    public boolean dataOutdated() {
+        Date dataDate = settingsService.getDataDate();
+        return dataDate == null || Days.daysBetween(new DateTime(dataDate), new DateTime()).getDays() > 2;
+    }
 
-        public BackgroundLoadData(SectionsPagerAdapter mSectionsPagerAdapter) {
+    private class BackgroundLoadData extends SchedulesRestTask {
+        SectionsPagerAdapter pagerAdapter;
+
+        public BackgroundLoadData(SectionsPagerAdapter pagerAdapter) {
             super();
-            this.mSectionsPagerAdapter = mSectionsPagerAdapter;
+            this.pagerAdapter = pagerAdapter;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            settingsService.setDataDate(new Date());
         }
 
         @Override
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             dataService.setMeetings(meetings);
             dataService.saveMeetings();
             loadData();
-            mSectionsPagerAdapter.notifyDataSetChanged();
+            this.pagerAdapter.notifyDataSetChanged();
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.data_updated, Snackbar.LENGTH_LONG);
             snackbar.show();
         }
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            int position = getArguments().getInt(ARG_SECTION_NUMBER);
+            //int position = getArguments().getInt(ARG_SECTION_NUMBER);
             Meeting meeting = (Meeting) getArguments().getSerializable(ARG_MEETING);
 
             meetingListView = (ListView) rootView.findViewById(R.id.list_meeting_days);
