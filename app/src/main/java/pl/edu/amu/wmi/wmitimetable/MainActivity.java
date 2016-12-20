@@ -19,18 +19,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import pl.edu.amu.wmi.wmitimetable.adapter.MeetingListAdapter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
+import pl.edu.amu.wmi.wmitimetable.task.SchedulesDateTask;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
 
@@ -93,7 +94,15 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean dataOutdated() {
         Date dataDate = settingsService.getDataDate();
-        return dataDate == null || Days.daysBetween(new DateTime(dataDate), new DateTime()).getDays() > 2;
+        Date schedulesDate = null;
+        try {
+            schedulesDate = new SchedulesDateTask().execute().get().toDate();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return dataDate == null || dataDate.before(schedulesDate);
     }
 
     private class BackgroundLoadData extends SchedulesRestTask {
