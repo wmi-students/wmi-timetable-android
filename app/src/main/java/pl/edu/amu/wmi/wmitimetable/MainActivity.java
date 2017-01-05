@@ -101,7 +101,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException | ExecutionException e) {
             Log.e("dataOutdated", e.getMessage());
         }
-        return dataDate == null || schedulesDate == null || dataDate.before(schedulesDate.toDate());
+        if(dataDate == null) {
+            return true;
+        } else if (schedulesDate != null && dataDate != null) {
+            return dataDate.before(schedulesDate.toDate());
+        } else {
+            return false;
+        }
     }
 
     private class BackgroundLoadData extends SchedulesRestTask {
