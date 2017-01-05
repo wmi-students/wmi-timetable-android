@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +32,8 @@ import pl.edu.amu.wmi.wmitimetable.model.Meeting;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
-import pl.edu.amu.wmi.wmitimetable.task.SchedulesDateTask;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
+import pl.edu.amu.wmi.wmitimetable.task.SchedulesDateTask;
 import pl.edu.amu.wmi.wmitimetable.task.SchedulesRestTask;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,15 +95,13 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean dataOutdated() {
         Date dataDate = settingsService.getDataDate();
-        Date schedulesDate = null;
+        DateTime schedulesDate = null;
         try {
-            schedulesDate = new SchedulesDateTask().execute().get().toDate();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+            schedulesDate = new SchedulesDateTask().execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.e("dataOutdated", e.getMessage());
         }
-        return dataDate == null || dataDate.before(schedulesDate);
+        return dataDate == null || schedulesDate == null || dataDate.before(schedulesDate.toDate());
     }
 
     private class BackgroundLoadData extends SchedulesRestTask {
