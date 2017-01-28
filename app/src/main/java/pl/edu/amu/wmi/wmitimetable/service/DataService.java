@@ -11,9 +11,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.edu.amu.wmi.wmitimetable.model.Filter;
 import pl.edu.amu.wmi.wmitimetable.model.Meeting;
+import pl.edu.amu.wmi.wmitimetable.model.Schedule;
+import pl.edu.amu.wmi.wmitimetable.model.SpecialFilter;
 import pl.edu.amu.wmi.wmitimetable.model.World;
 
 public class DataService {
@@ -21,7 +24,8 @@ public class DataService {
     private Gson gson;
     private Context context;
 
-    private final String MEETINGS_FILE_NAME = "meetings.json";
+    public final String MEETINGS_FILE_NAME = "meetings.json";
+    public final String SPECIAL_FILTERS_FILE_NAME = "special_filters.json";
 
     public DataService(Context context) {
         this.context = context;
@@ -113,12 +117,77 @@ public class DataService {
         outputStream.close();
     }
 
-    public boolean isDataFile() {
-        File file = new File(context.getFilesDir(), MEETINGS_FILE_NAME);
+    public boolean isMeetingsDataFile() {
+        return isDataFile(MEETINGS_FILE_NAME);
+    }
+
+    public boolean isDataFile(String fileName){
+        File file = new File(context.getFilesDir(), fileName);
         return  file.exists();
     }
 
     public boolean getLoaded() {
         return  World.getInstance().getLoaded();
+    }
+
+    public List<SpecialFilter> getSpecialFilters(){
+        return  World.getInstance().getSpecialFilters();
+    }
+
+    public void setSpecialFilters(List<SpecialFilter> specialFilters){
+        World.getInstance().setSpecialFilters(specialFilters);
+    }
+    public boolean loadSpecialFilters() {
+        try {
+            World.getInstance().setSpecialFilters(loadSpecialFiltersFromFile());
+            return true;
+        }catch (IOException exc){
+            World.getInstance().clear();
+            return false;
+        }
+    }
+
+    public boolean saveSpecialFilters(){
+        try {
+            saveSpecialFiltersToFile(World.getInstance().getSpecialFilters());
+            return true;
+        }catch (IOException exc){
+            return false;
+        }
+    }
+    private List<SpecialFilter> loadSpecialFiltersFromFile() throws IOException {
+        String content = readFromFile(SPECIAL_FILTERS_FILE_NAME);
+        return deserializeSpecialFilters(content);
+    }
+
+    private List<SpecialFilter> deserializeSpecialFilters(String content) {
+        return gson.fromJson(content,new TypeToken<ArrayList<SpecialFilter>>() {}.getType());
+    }
+    private void saveSpecialFiltersToFile(List<SpecialFilter> specialFilters) throws IOException {
+        String content = serializeSpecialFilters(specialFilters);
+        writeToFile(SPECIAL_FILTERS_FILE_NAME, content);
+    }
+
+    private String serializeSpecialFilters(List<SpecialFilter> specialFilters) {
+        return gson.toJson(specialFilters);
+    }
+
+    public boolean isSpecialFilterDataFile() {
+        return isDataFile(SPECIAL_FILTERS_FILE_NAME);
+    }
+
+    public boolean scheduleInSpecialFilters(Schedule schedule) {
+        List<SpecialFilter> specialFilters = getSpecialFilters();
+
+        for (SpecialFilter specialFilter : specialFilters) {
+            if(specialFilter.getSubject().equals(schedule.getSubject()) &&
+                    specialFilter.getStudy().equals(schedule.getStudy())  &&
+                    specialFilter.getYear().equals(schedule.getYear())
+                    ){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

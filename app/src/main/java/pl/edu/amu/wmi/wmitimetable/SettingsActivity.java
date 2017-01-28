@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
         if(dataService.getLoaded() && settingsService.settingsExists()){
             loadFilters();
         }else {
-            if (dataService.isDataFile() && settingsService.settingsExists()) {
+            if (dataService.isMeetingsDataFile() && settingsService.settingsExists()) {
                 dataService.loadMeetings();
                 goMeetings();
             } else {

@@ -15,4 +15,6 @@ public class Schedule implements Serializable {
     private String leader;
     private String room1;
     private String room2;
+
+    private transient boolean special;
 }

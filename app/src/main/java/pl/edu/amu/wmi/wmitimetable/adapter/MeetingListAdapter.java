@@ -19,6 +19,7 @@ import java.util.Locale;
 import pl.edu.amu.wmi.wmitimetable.R;
 import pl.edu.amu.wmi.wmitimetable.model.MeetingDay;
 import pl.edu.amu.wmi.wmitimetable.model.Schedule;
+import pl.edu.amu.wmi.wmitimetable.service.DataService;
 import pl.edu.amu.wmi.wmitimetable.service.SettingsService;
 
 public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
@@ -27,6 +28,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
     private ListView meetingDayListView;
     private MeetingDayListAdapter meetingDayArrayAdapter;
     private SettingsService settingsService;
+    private DataService dataService;
 
     public MeetingListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -35,6 +37,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
     public MeetingListAdapter(Context context, int resource, List<MeetingDay> items) {
         super(context, resource, items);
         settingsService = new SettingsService((Activity) context);
+        dataService = new DataService(context);
     }
 
     @Override
@@ -67,6 +70,9 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingDay> {
 
         for (Schedule schedule : schedules) {
             if(settingsService.scheduleInFilter(schedule)){
+                filteredSchedules.add(schedule);
+            }else if( dataService.scheduleInSpecialFilters(schedule)){
+                schedule.setSpecial(true);
                 filteredSchedules.add(schedule);
             }
         }
