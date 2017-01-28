@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +44,7 @@ public class SettingsService {
 
     public Date getDataDate(){
         try {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("pl", "PL"));
             return format.parse(loadSetting("loadDate"));
         } catch (ParseException e) {
             Log.e("SettingsService", e.getMessage());
@@ -56,7 +53,7 @@ public class SettingsService {
     }
 
     public  void setDataDate(Date date){
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("pl", "PL"));
         saveSetting("loadDate", format.format(date));
     }
 }
