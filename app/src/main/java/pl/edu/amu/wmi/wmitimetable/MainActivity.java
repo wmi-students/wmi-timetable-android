@@ -55,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        if (dataService.isDataFile() && settingsService.settingsExists()) {
+        if(dataService.isSpecialFilterDataFile()){
+            dataService.loadSpecialFilters();
+        }
+
+        if (dataService.isMeetingsDataFile() && settingsService.settingsExists()) {
             dataService.loadMeetings();
         } else {
             goSettings();
@@ -146,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean meetingHasFilteredSchedules(Meeting meeting) {
         for (MeetingDay meetingDay : meeting.getMeetingDays()) {
             for (Schedule schedule : meetingDay.getSchedules()) {
-                if(settingsService.scheduleInFilter(schedule)){
+                if(settingsService.scheduleInFilter(schedule) ||
+                        dataService.scheduleInSpecialFilters(schedule)){
                     return true;
                 }
             }
@@ -175,6 +180,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_filters) {
+            goFilters();
+            return true;
+        }
         if(id == R.id.action_about) {
             showAbout();
         }
@@ -215,7 +224,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
-
+    private void goFilters() {
+        Intent intent = new Intent(this, SpecialFiltersActivity.class);
+        startActivity(intent);
+    }
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_MEETING = "meeting_object";

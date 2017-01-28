@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pl.edu.amu.wmi.wmitimetable.SpecialFiltersActivity">
+    <item
+        android:id="@+id/action_add"
+        android:orderInCategory="100"
+        android:title="Dodaj"
+        app:showAsAction="never|always"
+        android:icon="@drawable/ic_action_add" />
+    <item
+        android:id="@+id/action_clear"
+        android:orderInCategory="101"
+        android:title="Wyczyść"
+        app:showAsAction="never|always"
+        android:icon="@drawable/ic_action_clear" />
+</menu>

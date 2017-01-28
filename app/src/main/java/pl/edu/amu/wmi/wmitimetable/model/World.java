@@ -2,6 +2,7 @@ package pl.edu.amu.wmi.wmitimetable.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,10 @@ public class World {
 
     @Getter
     private Filter filter = new Filter();
+
+    @Getter
+    @Setter
+    private List<SpecialFilter> specialFilters = new ArrayList();
 
     @Getter
     private ArrayList<Meeting> meetings = new ArrayList<>();

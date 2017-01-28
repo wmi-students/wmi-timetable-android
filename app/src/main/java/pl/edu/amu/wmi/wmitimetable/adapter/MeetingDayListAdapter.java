@@ -53,8 +53,9 @@ class MeetingDayListAdapter extends ArrayAdapter<Schedule> {
         Date date = scheduleService.getDateFromSchedule(schedule);
         textTime.setText(format.format(date));
 
-        if (scheduleIsNow(date)) {
-            //view.setBackgroundResource(R.color.colorActive);
+        if(schedule.isSpecial()){
+            view.setBackgroundResource(R.color.colorSpecial);
+        }else if (scheduleIsNow(date)) {
             textTime.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
             textGroup.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
             textRoom.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
