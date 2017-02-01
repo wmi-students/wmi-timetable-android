@@ -71,6 +71,7 @@ public class SpecialFilterActivity extends AppCompatActivity {
         //specialFilter = dataService.findOrAdd(subject, study, year);
 
         if(specialFilter == null){
+            specialFilter = new SpecialFilter();
             dataService.getSpecialFilters().add(specialFilter);
         }else {
             int index = dataService.getSpecialFilters().indexOf(specialFilter);

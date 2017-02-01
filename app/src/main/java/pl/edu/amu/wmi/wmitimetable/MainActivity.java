@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -246,8 +247,8 @@ public class MainActivity extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_MEETING = "meeting_object";
 
-        MeetingListAdapter meetingArrayAdapter;
-        ListView meetingListView;
+        MeetingListAdapter meetingListAdapter;
+        ExpandableListView meetingListView;
 
         public PlaceholderFragment() {
         }
@@ -269,11 +270,10 @@ public class MainActivity extends AppCompatActivity {
             //int position = getArguments().getInt(ARG_SECTION_NUMBER);
             Meeting meeting = (Meeting) getArguments().getSerializable(ARG_MEETING);
 
-            meetingListView = (ListView) rootView.findViewById(R.id.list_meeting_days);
+            meetingListView = (ExpandableListView) rootView.findViewById(R.id.list_meetings);
             ArrayList<MeetingDay> meetingDays = meeting.getMeetingDays();
-            meetingArrayAdapter = new MeetingListAdapter(getActivity(), R.layout.meeting_list_item, meetingDays);
-            meetingListView.setAdapter(meetingArrayAdapter);
-
+            meetingListAdapter = new MeetingListAdapter(getActivity(), meetingDays);
+            meetingListView.setAdapter(meetingListAdapter);
             return rootView;
         }
 
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void update() {
-            meetingArrayAdapter.notifyDataSetChanged();
+            meetingListAdapter.notifyDataSetChanged();
         }
     }
 

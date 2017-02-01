@@ -1,0 +1,54 @@
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="16dp"
+    android:id="@+id/schedule_item"
+    android:background="@color/colorSettingsBackground">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginRight="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/schedule_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Nazwa przedmiotu"
+                android:textColor="@color/colorTextLight"
+                android:lines="1"
+                android:ellipsize="end"
+                />
+
+            <TextView
+                android:id="@+id/schedule_details"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="13dp"
+                android:text="1WA  Aula A  Rok 1  Janusz Kąkol"
+                android:textColor="@color/colorTextDark"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/schedule_time"
+            android:layout_marginLeft="-48dp"
+            android:layout_width="48dp"
+            android:gravity="end"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:text="8:45"
+            android:textColor="@color/colorTextLight"
+            />
+
+    </LinearLayout>
+</LinearLayout>
