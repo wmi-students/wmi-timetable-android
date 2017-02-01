@@ -16,6 +16,8 @@ import org.joda.time.DateTime;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -164,6 +166,8 @@ public class MeetingListAdapter extends BaseExpandableListAdapter {
                 filteredSchedules.add(schedule);
             }
         }
+
+        Collections.sort(filteredSchedules);
 
         return filteredSchedules;
     }

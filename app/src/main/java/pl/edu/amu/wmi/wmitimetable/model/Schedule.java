@@ -3,9 +3,10 @@ package pl.edu.amu.wmi.wmitimetable.model;
 import java.io.Serializable;
 
 import lombok.Data;
+import pl.edu.amu.wmi.wmitimetable.service.ScheduleService;
 
 @Data
-public class Schedule implements Serializable {
+public class Schedule implements Serializable, Comparable<Schedule> {
     private int id;
     private String when;
     private String group;
@@ -17,4 +18,10 @@ public class Schedule implements Serializable {
     private String room2;
 
     private transient boolean special;
+
+    @Override
+    public int compareTo(Schedule schedule) {
+        ScheduleService scheduleService = new ScheduleService();
+        return scheduleService.getDateFromSchedule(this).compareTo(scheduleService.getDateFromSchedule(schedule));
+    }
 }
