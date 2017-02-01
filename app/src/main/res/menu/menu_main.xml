@@ -19,6 +19,6 @@
         android:orderInCategory="100"
         android:title="@string/action_about"
         app:showAsAction="never" />
-    <item android:title="Filtry specjalne"
+    <item android:title="Filtry specjalne (BETA)"
         android:id="@+id/action_filters" />
 </menu>

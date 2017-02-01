@@ -45,8 +45,12 @@ public class SettingsService {
     public Date getDataDate(){
         try {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("pl", "PL"));
-            return format.parse(loadSetting("loadDate"));
-        } catch (ParseException e) {
+            String setting = loadSetting("loadDate");
+            if(setting == null) {
+                return  null;
+            }
+            return format.parse(setting);
+        } catch (Exception e) {
             Log.e("SettingsService", e.getMessage());
             return null;
         }
