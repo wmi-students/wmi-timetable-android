@@ -125,9 +125,6 @@ public class MeetingListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
 
-//        ExpandableListView mExpandableListView = (ExpandableListView) parent;
-//        mExpandableListView.expandGroup(groupPosition);
-
         MeetingDay meetingDay = meetingDays.get(groupPosition);
 
         if (convertView == null) {
@@ -138,7 +135,7 @@ public class MeetingListAdapter extends BaseExpandableListAdapter {
 
         TextView day = (TextView) convertView.findViewById(R.id.meeting_day_header);
         Date dayDate = meetingDay.getDate();
-        DateFormat format = new SimpleDateFormat("dd MMM", new Locale("pl", "PL"));
+        DateFormat format = new SimpleDateFormat("dd MMMM yyyy", new Locale("pl", "PL"));
         day.setText(format.format(dayDate));
 
         return convertView;
