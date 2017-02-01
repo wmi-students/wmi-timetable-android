@@ -125,8 +125,8 @@ public class MeetingListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
 
-        ExpandableListView mExpandableListView = (ExpandableListView) parent;
-        mExpandableListView.expandGroup(groupPosition);
+//        ExpandableListView mExpandableListView = (ExpandableListView) parent;
+//        mExpandableListView.expandGroup(groupPosition);
 
         MeetingDay meetingDay = meetingDays.get(groupPosition);
 

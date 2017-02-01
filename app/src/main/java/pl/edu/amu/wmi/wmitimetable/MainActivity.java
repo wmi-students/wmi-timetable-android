@@ -274,7 +274,18 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<MeetingDay> meetingDays = meeting.getMeetingDays();
             meetingListAdapter = new MeetingListAdapter(getActivity(), meetingDays);
             meetingListView.setAdapter(meetingListAdapter);
+
+            ExpandAllDays();
+
             return rootView;
+        }
+
+        private void ExpandAllDays() {
+            int groupCount = meetingListAdapter.getGroupCount();
+
+            for (int groupIndex=0; groupIndex<groupCount;groupIndex++){
+                meetingListView.expandGroup(groupIndex);
+            }
         }
 
         @Override
