@@ -34,6 +34,13 @@ public class SpecialFiltersActivity extends AppCompatActivity {
         loadData();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+    }
+
     private void loadData() {
         dataService.loadSpecialFilters();
         specialFilters = dataService.getSpecialFilters();
