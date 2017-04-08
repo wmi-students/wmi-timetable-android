@@ -9,6 +9,8 @@ import android.widget.EditText;
 
 import org.w3c.dom.Text;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import pl.edu.amu.wmi.wmitimetable.model.SpecialFilter;
 import pl.edu.amu.wmi.wmitimetable.service.DataService;
 
@@ -17,9 +19,19 @@ public class SpecialFilterActivity extends AppCompatActivity {
     public final static String SPECIAL_FILTER_PARAM_NAME = "special_filter_param";
 
     DataService dataService;
+
+    @BindView(R.id.edit_subject)
     EditText editSubject;
+
+    @BindView(R.id.edit_study)
     EditText editStudy;
+
+    @BindView(R.id.edit_year)
     EditText editYear;
+
+    @BindView(R.id.edit_group)
+    EditText editGroup;
+
     SpecialFilter specialFilter;
 
     @Override
@@ -28,12 +40,10 @@ public class SpecialFilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        specialFilter = (SpecialFilter) getIntent().getSerializableExtra(SPECIAL_FILTER_PARAM_NAME);
+        ButterKnife.bind(this);
 
+        specialFilter = (SpecialFilter) getIntent().getSerializableExtra(SPECIAL_FILTER_PARAM_NAME);
         dataService = new DataService(this);
-        editSubject = (EditText)findViewById(R.id.edit_subject);
-        editStudy = (EditText)findViewById(R.id.edit_study);
-        editYear = (EditText)findViewById(R.id.edit_year);
 
         loadData();
     }
@@ -44,6 +54,7 @@ public class SpecialFilterActivity extends AppCompatActivity {
         editSubject.setText(specialFilter.getSubject());
         editStudy.setText(specialFilter.getStudy());
         editYear.setText(specialFilter.getYear());
+        editGroup.setText(specialFilter.getGroup());
     }
 
     @Override
@@ -67,8 +78,7 @@ public class SpecialFilterActivity extends AppCompatActivity {
         String subject = editSubject.getText().toString();
         String study = editStudy.getText().toString();
         String year = editYear.getText().toString();
-
-        //specialFilter = dataService.findOrAdd(subject, study, year);
+        String group = editGroup.getText().toString();
 
         if(specialFilter == null){
             specialFilter = new SpecialFilter();
@@ -81,6 +91,7 @@ public class SpecialFilterActivity extends AppCompatActivity {
         specialFilter.setSubject(subject);
         specialFilter.setStudy(study);
         specialFilter.setYear(year);
+        specialFilter.setGroup(group);
 
         dataService.saveSpecialFilters();
 
