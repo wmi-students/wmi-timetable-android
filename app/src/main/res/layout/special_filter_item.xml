@@ -38,6 +38,14 @@
             android:textSize="13dp"
             android:textColor="@color/colorSettingsForeground"
             android:id="@+id/year" />
+        <TextView
+            android:text="1CA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:textSize="13dp"
+            android:textColor="@color/colorSettingsForeground"
+            android:id="@+id/group" />
     </LinearLayout>
 
 

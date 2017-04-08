@@ -184,7 +184,14 @@ public class DataService {
                     specialFilter.getStudy().equals(schedule.getStudy())  &&
                     specialFilter.getYear().equals(schedule.getYear())
                     ){
-                return true;
+                // optional group
+                if(specialFilter.getGroup()== null ) {
+                    return  true;
+                }
+
+                if (schedule.getGroup().contains("WA") || schedule.getGroup().toLowerCase().equals(specialFilter.getGroup().toLowerCase())) {
+                    return true;
+                }
             }
         }
 

@@ -59,6 +59,9 @@ public class SpecialFiltersAdapter extends ArrayAdapter<SpecialFilter> {
         TextView textYear = (TextView) view.findViewById(R.id.year);
         textYear.setText(specialFilter.getYear());
 
+        TextView textGroup = (TextView) view.findViewById(R.id.group);
+        textGroup.setText(specialFilter.getGroup());
+
         return view;
     }
 }
